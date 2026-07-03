@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +6,7 @@
 <title>Find Deal Vault — The Real Cost of Everything</title>
 <meta name="description" content="You're being overcharged. Here's proof. See the true manufacturing cost vs retail price of thousands of products.">
 <meta property="og:title" content="Find Deal Vault — The Real Cost of Everything">
-<meta property="og:description" content="Discover what things actually cost to make vs what you pay. The truth will shock you.">
+<meta property="og:description" content="Discover what things actually cost to make vs what you pay.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,1559 +15,528 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-  :root {
-    --gold: #D4A843;
-    --gold-light: #E8C96A;
-    --gold-dark: #B8922F;
-    --vault-bg: #06060A;
-    --vault-card: #0E0E14;
-    --vault-border: #1A1A24;
-    --red-accent: #EF4444;
-    --green-accent: #22C55E;
-    --text-primary: #F0F0F5;
-    --text-secondary: #8888A0;
-    --text-dim: #55556A;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--vault-bg);
-    color: var(--text-primary);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--vault-bg); }
-  ::-webkit-scrollbar-thumb { background: #222233; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #333344; }
-
-  .font-display { font-family: 'Playfair Display', serif; }
-  .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-  /* Vault Door Animation */
-  @keyframes vaultReveal {
-    0% { clip-path: inset(0 50% 0 50%); opacity: 0; }
-    30% { clip-path: inset(0 50% 0 50%); opacity: 1; }
-    60% { clip-path: inset(0 0% 0 0%); opacity: 1; }
-    100% { clip-path: inset(0 0% 0 0%); opacity: 1; }
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes barGrow {
-    from { width: 0%; }
-  }
-
-  @keyframes countUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes pulse-gold {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0.3); }
-    50% { box-shadow: 0 0 30px 5px rgba(212, 168, 67, 0.15); }
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-    20%, 40%, 60%, 80% { transform: translateX(4px); }
-  }
-
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes confetti-fall {
-    0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-  }
-
-  .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .animate-fade-in { animation: fadeIn 0.6s ease forwards; }
-  .animate-slide-down { animation: slideDown 0.5s ease forwards; }
-  .animate-scale-in { animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .animate-shake { animation: shake 0.5s ease; }
-
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
-  .delay-500 { animation-delay: 500ms; }
-  .delay-600 { animation-delay: 600ms; }
-
-  .gold-shimmer {
-    background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold), var(--gold-light), var(--gold-dark));
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 3s linear infinite;
-  }
-
-  .vault-glow {
-    box-shadow: 0 0 60px -15px rgba(212, 168, 67, 0.15),
-                0 0 120px -30px rgba(212, 168, 67, 0.08);
-  }
-
-  .card-hover {
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5),
-                0 0 0 1px rgba(212, 168, 67, 0.15);
-  }
-
-  .bar-animate {
-    animation: barGrow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .markup-bar-cost {
-    background: linear-gradient(90deg, #22C55E, #16A34A);
-  }
-
-  .markup-bar-retail {
-    background: linear-gradient(90deg, #EF4444, #DC2626);
-  }
-
-  .filter-btn {
-    transition: all 0.3s ease;
-    position: relative;
-  }
-  .filter-btn::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: var(--gold);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-  }
-  .filter-btn.active::after {
-    width: 100%;
-  }
-  .filter-btn.active {
-    color: var(--gold);
-  }
-
-  .modal-overlay {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .toast {
-    animation: slideDown 0.4s ease, fadeOut 0.4s ease 2.6s forwards;
-  }
-  @keyframes fadeOut {
-    to { opacity: 0; transform: translateY(-10px); }
-  }
-
-  .hero-bg {
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212, 168, 67, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(212, 168, 67, 0.03) 0%, transparent 50%),
-                var(--vault-bg);
-  }
-
-  .grid-bg {
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  .product-card-hidden {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  .product-card-visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .quiz-option {
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-  .quiz-option:hover {
-    border-color: var(--gold);
-    background: rgba(212, 168, 67, 0.05);
-  }
-  .quiz-option.correct {
-    border-color: #22C55E !important;
-    background: rgba(34, 197, 94, 0.1) !important;
-  }
-  .quiz-option.wrong {
-    border-color: #EF4444 !important;
-    background: rgba(239, 68, 68, 0.1) !important;
-  }
-
-  .stat-number {
-    font-variant-numeric: tabular-nums;
-  }
-
-  @media (max-width: 768px) {
-    .hero-title { font-size: 2.5rem !important; }
-    .hero-subtitle { font-size: 1rem !important; }
-  }
+  :root{--gold:#D4A843;--gold-light:#E8C96A;--gold-dark:#B8922F;--vault-bg:#06060A;--vault-card:#0E0E14;--vault-border:#1A1A24;--red-accent:#EF4444;--green-accent:#22C55E;--text-primary:#F0F0F5;--text-secondary:#8888A0;--text-dim:#55556A}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--vault-bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--vault-bg)}::-webkit-scrollbar-thumb{background:#222233;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:#333344}
+  .font-display{font-family:'Playfair Display',serif}.font-mono{font-family:'JetBrains Mono',monospace}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes barGrow{from{width:0%}}
+  @keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,0.3)}50%{box-shadow:0 0 30px 5px rgba(212,168,67,0.15)}}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes scaleIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+  @keyframes fadeOut{to{opacity:0;transform:translateY(-10px);pointer-events:none}}
+  @keyframes bounceIn{0%{transform:scale(0)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+  .animate-fade-up{animation:fadeUp .8s cubic-bezier(.16,1,.3,1) forwards}
+  .animate-fade-in{animation:fadeIn .6s ease forwards}
+  .animate-slide-down{animation:slideDown .5s ease forwards}
+  .animate-scale-in{animation:scaleIn .4s cubic-bezier(.16,1,.3,1) forwards}
+  .delay-100{animation-delay:.1s}.delay-200{animation-delay:.2s}.delay-300{animation-delay:.3s}.delay-400{animation-delay:.4s}.delay-500{animation-delay:.5s}.delay-600{animation-delay:.6s}
+  .gold-shimmer{background:linear-gradient(90deg,var(--gold-dark),var(--gold-light),var(--gold),var(--gold-light),var(--gold-dark));background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite}
+  .card-hover{transition:all .4s cubic-bezier(.16,1,.3,1)}.card-hover:hover{transform:translateY(-4px);box-shadow:0 20px 40px -15px rgba(0,0,0,.5),0 0 0 1px rgba(212,168,67,.15)}
+  .bar-animate{animation:barGrow 1.2s cubic-bezier(.16,1,.3,1) forwards}
+  .markup-bar-cost{background:linear-gradient(90deg,#22C55E,#16A34A)}.markup-bar-retail{background:linear-gradient(90deg,#EF4444,#DC2626)}
+  .modal-overlay{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .toast{animation:slideDown .4s ease,fadeOut .4s ease 2.6s forwards}
+  .hero-bg{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(212,168,67,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 20%,rgba(212,168,67,.03) 0%,transparent 50%),var(--vault-bg)}
+  .grid-bg{background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px}
+  .product-card-hidden{opacity:0;transform:translateY(20px)}.product-card-visible{opacity:1;transform:translateY(0);transition:all .6s cubic-bezier(.16,1,.3,1)}
+  .quiz-option{transition:all .2s ease;cursor:pointer}.quiz-option:hover{border-color:var(--gold);background:rgba(212,168,67,.05)}.quiz-option.correct{border-color:#22C55E!important;background:rgba(34,197,94,.1)!important}.quiz-option.wrong{border-color:#EF4444!important;background:rgba(239,68,68,.1)!important}
+  .stat-number{font-variant-numeric:tabular-nums}
+  /* Nav active link */
+  .nav-link{position:relative;transition:color .3s ease}.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--gold);transition:width .3s ease}.nav-link.active{color:#fff}.nav-link.active::after{width:100%}
+  /* Category dropdown custom styling */
+  .cat-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238888A0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:40px}
+  /* Disclaimer scrollable */
+  .disclaimer-scroll{max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#333344 transparent}.disclaimer-scroll::-webkit-scrollbar{width:4px}.disclaimer-scroll::-webkit-scrollbar-track{background:transparent}.disclaimer-scroll::-webkit-scrollbar-thumb{background:#333344;border-radius:2px}.disclaimer-scroll::-webkit-scrollbar-thumb:hover{background:#444466}
+  /* Back to top */
+  #backToTop{opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.16,1,.3,1)}#backToTop.visible{opacity:1;pointer-events:auto}
+  /* Random button pulse */
+  @keyframes randomPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,.4)}50%{box-shadow:0 0 0 8px rgba(212,168,67,0)}}
+  .random-pulse{animation:randomPulse 2s ease infinite}
+  @media(max-width:768px){.hero-title{font-size:2.5rem!important}.hero-subtitle{font-size:1rem!important}}
 </style>
 </head>
 <body class="hero-bg">
 
-<!-- ==================== NAVBAR ==================== -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style="background: rgba(6,6,10,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid transparent;">
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style="background:rgba(6,6,10,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid transparent">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
-    <a href="#" class="flex items-center gap-2.5 group">
-      <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark));">
-        <i data-lucide="lock-keyhole" class="w-4 h-4 sm:w-5 sm:h-5 text-black"></i>
-      </div>
-      <span class="text-base sm:text-lg font-bold tracking-tight">FindDeal<span style="color: var(--gold);">Vault</span></span>
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark))"><i data-lucide="lock-keyhole" class="w-4 h-4 sm:w-5 sm:h-5 text-black"></i></div>
+      <span class="text-base sm:text-lg font-bold tracking-tight">FindDeal<span style="color:var(--gold)">Vault</span></span>
     </a>
     <div class="hidden sm:flex items-center gap-8">
-      <a href="#vault" class="text-sm text-gray-400 hover:text-white transition-colors">Vault</a>
-      <a href="#leaderboard" class="text-sm text-gray-400 hover:text-white transition-colors">Leaderboard</a>
-      <a href="#quiz" class="text-sm text-gray-400 hover:text-white transition-colors">Quiz</a>
-      <a href="#about" class="text-sm text-gray-400 hover:text-white transition-colors">About</a>
+      <a href="#vault" class="nav-link text-sm text-gray-400 hover:text-white" onclick="smoothNav(event,'#vault')">Vault</a>
+      <a href="#leaderboard" class="nav-link text-sm text-gray-400 hover:text-white" onclick="smoothNav(event,'#leaderboard')">Leaderboard</a>
+      <a href="#quiz" class="nav-link text-sm text-gray-400 hover:text-white" onclick="smoothNav(event,'#quiz')">Quiz</a>
+      <a href="#about" class="nav-link text-sm text-gray-400 hover:text-white" onclick="smoothNav(event,'#about')">About</a>
     </div>
     <div class="flex items-center gap-3">
-      <button onclick="scrollToSection('vault')" class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));">
-        <i data-lucide="unlock" class="w-4 h-4"></i>
-        Open Vault
+      <button onclick="openRandomProduct()" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-105 random-pulse" style="border:1px solid rgba(212,168,67,.3);color:var(--gold);background:rgba(212,168,67,.05)">
+        <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>Random
       </button>
-      <button id="mobileMenuBtn" class="sm:hidden w-10 h-10 flex items-center justify-center rounded-lg border border-white/10">
-        <i data-lucide="menu" class="w-5 h-5"></i>
-      </button>
+      <button onclick="smoothNav(null,'#vault')" class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark))"><i data-lucide="unlock" class="w-4 h-4"></i>Open Vault</button>
+      <button id="mobileMenuBtn" class="sm:hidden w-10 h-10 flex items-center justify-center rounded-lg border border-white/10"><i data-lucide="menu" class="w-5 h-5"></i></button>
     </div>
   </div>
   <!-- Mobile Menu -->
-  <div id="mobileMenu" class="sm:hidden hidden border-t border-white/5 px-5 py-4 space-y-3" style="background: rgba(6,6,10,0.95);">
-    <a href="#vault" class="block text-sm text-gray-400 hover:text-white py-2" onclick="closeMobileMenu()">Vault</a>
-    <a href="#leaderboard" class="block text-sm text-gray-400 hover:text-white py-2" onclick="closeMobileMenu()">Leaderboard</a>
-    <a href="#quiz" class="block text-sm text-gray-400 hover:text-white py-2" onclick="closeMobileMenu()">Quiz</a>
-    <a href="#about" class="block text-sm text-gray-400 hover:text-white py-2" onclick="closeMobileMenu()">About</a>
-    <button onclick="scrollToSection('vault');closeMobileMenu()" class="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-black" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));">
-      <i data-lucide="unlock" class="w-4 h-4"></i> Open Vault
-    </button>
+  <div id="mobileMenu" class="sm:hidden hidden border-t border-white/5 px-5 py-4 space-y-1" style="background:rgba(6,6,10,.95)">
+    <a href="#vault" class="flex items-center gap-3 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5" onclick="closeMobile();smoothNav(event,'#vault')"><i data-lucide="lock" class="w-4 h-4"></i>Vault</a>
+    <a href="#leaderboard" class="flex items-center gap-3 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5" onclick="closeMobile();smoothNav(event,'#leaderboard')"><i data-lucide="flame" class="w-4 h-4"></i>Leaderboard</a>
+    <a href="#quiz" class="flex items-center gap-3 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5" onclick="closeMobile();smoothNav(event,'#quiz')"><i data-lucide="brain" class="w-4 h-4"></i>Quiz</a>
+    <a href="#about" class="flex items-center gap-3 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5" onclick="closeMobile();smoothNav(event,'#about')"><i data-lucide="info" class="w-4 h-4"></i>About</a>
+    <div class="border-t border-white/5 pt-3 mt-2 flex gap-2">
+      <button onclick="closeMobile();openRandomProduct()" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold" style="border:1px solid rgba(212,168,67,.3);color:var(--gold);background:rgba(212,168,67,.05)"><i data-lucide="shuffle" class="w-3.5 h-3.5"></i>Random</button>
+      <button onclick="closeMobile();smoothNav(null,'#vault')" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-black" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark))"><i data-lucide="unlock" class="w-3.5 h-3.5"></i>Open Vault</button>
+    </div>
   </div>
 </nav>
 
-<!-- ==================== HERO ==================== -->
+<!-- HERO -->
 <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
   <div class="absolute inset-0 grid-bg opacity-50"></div>
-  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20" style="background: radial-gradient(circle, rgba(212,168,67,0.15), transparent 70%);"></div>
-
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20" style="background:radial-gradient(circle,rgba(212,168,67,.15),transparent 70%)"></div>
   <div class="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 text-center">
-    <div class="animate-fade-up opacity-0" style="animation-delay: 0.1s;">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8" style="border-color: rgba(212,168,67,0.2); background: rgba(212,168,67,0.05);">
-        <span class="w-2 h-2 rounded-full animate-pulse" style="background: var(--gold);"></span>
-        <span class="text-xs font-medium tracking-wider uppercase" style="color: var(--gold);">Vault Unlocked</span>
-      </div>
+    <div class="animate-fade-up opacity-0" style="animation-delay:.1s">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8" style="border-color:rgba(212,168,67,.2);background:rgba(212,168,67,.05)"><span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--gold)"></span><span class="text-xs font-medium tracking-wider uppercase" style="color:var(--gold)">Vault Unlocked</span></div>
     </div>
-
-    <h1 class="hero-title font-display font-900 leading-[0.95] tracking-tight mb-6 animate-fade-up opacity-0" style="font-size: clamp(2.5rem, 7vw, 5.5rem); animation-delay: 0.25s;">
-      You're Being<br>
-      <span class="gold-shimmer">Overcharged.</span>
-    </h1>
-
-    <p class="hero-subtitle text-lg sm:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-10 animate-fade-up opacity-0" style="color: var(--text-secondary); animation-delay: 0.4s;">
-      See the true manufacturing cost of thousands of products.<br class="hidden sm:block">
-      What they cost to make vs. what you actually pay.
-    </p>
-
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up opacity-0" style="animation-delay: 0.55s;">
-      <button onclick="scrollToSection('vault')" class="group flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-semibold text-black transition-all duration-300 hover:scale-105 hover:shadow-lg" style="background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark)); box-shadow: 0 0 30px -5px rgba(212,168,67,0.3);">
-        <i data-lucide="lock-open" class="w-5 h-5"></i>
-        Enter the Vault
-        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
-      </button>
-      <button onclick="scrollToSection('quiz')" class="flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-medium border transition-all duration-300 hover:border-white/30 hover:bg-white/5" style="border-color: rgba(255,255,255,0.1); color: var(--text-secondary);">
-        <i data-lucide="brain" class="w-5 h-5"></i>
-        Test Your Knowledge
-      </button>
+    <h1 class="hero-title font-display font-900 leading-[.95] tracking-tight mb-6 animate-fade-up opacity-0" style="font-size:clamp(2.5rem,7vw,5.5rem);animation-delay:.25s">You're Being<br><span class="gold-shimmer">Overcharged.</span></h1>
+    <p class="hero-subtitle text-lg sm:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-10 animate-fade-up opacity-0" style="color:var(--text-secondary);animation-delay:.4s">See the true manufacturing cost of thousands of products.<br class="hidden sm:block">What they cost to make vs. what you actually pay.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up opacity-0" style="animation-delay:.55s">
+      <button onclick="smoothNav(null,'#vault')" class="group flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-semibold text-black transition-all duration-300 hover:scale-105 hover:shadow-lg" style="background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));box-shadow:0 0 30px -5px rgba(212,168,67,.3)"><i data-lucide="lock-open" class="w-5 h-5"></i>Enter the Vault<i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i></button>
+      <button onclick="smoothNav(null,'#quiz')" class="flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-medium border transition-all duration-300 hover:border-white/30 hover:bg-white/5" style="border-color:rgba(255,255,255,.1);color:var(--text-secondary)"><i data-lucide="brain" class="w-5 h-5"></i>Test Your Knowledge</button>
     </div>
-
-    <!-- Stats -->
-    <div class="grid grid-cols-3 gap-4 sm:gap-8 max-w-xl mx-auto animate-fade-up opacity-0" style="animation-delay: 0.7s;">
-      <div class="text-center">
-        <div class="text-2xl sm:text-4xl font-bold stat-number" style="color: var(--gold);" id="statProducts">0</div>
-        <div class="text-xs sm:text-sm mt-1" style="color: var(--text-dim);">Products</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl sm:text-4xl font-bold stat-number text-red-500" id="statMarkup">0</div>
-        <div class="text-xs sm:text-sm mt-1" style="color: var(--text-dim);">Avg. Markup</div>
-      </div>
-      <div class="text-center">
-        <div class="text-2xl sm:text-4xl font-bold stat-number text-green-500" id="statSaved">0</div>
-        <div class="text-xs sm:text-sm mt-1" style="color: var(--text-dim);">You Could Save</div>
-      </div>
+    <div class="grid grid-cols-3 gap-4 sm:gap-8 max-w-xl mx-auto animate-fade-up opacity-0" style="animation-delay:.7s">
+      <div class="text-center"><div class="text-2xl sm:text-4xl font-bold stat-number" style="color:var(--gold)" id="statProducts">0</div><div class="text-xs sm:text-sm mt-1" style="color:var(--text-dim)">Products</div></div>
+      <div class="text-center"><div class="text-2xl sm:text-4xl font-bold stat-number text-red-500" id="statMarkup">0</div><div class="text-xs sm:text-sm mt-1" style="color:var(--text-dim)">Avg. Markup</div></div>
+      <div class="text-center"><div class="text-2xl sm:text-4xl font-bold stat-number text-green-500" id="statSaved">0</div><div class="text-xs sm:text-sm mt-1" style="color:var(--text-dim)">You Could Save</div></div>
     </div>
   </div>
-
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in opacity-0" style="animation-delay: 1.2s;">
-    <div class="flex flex-col items-center gap-2" style="color: var(--text-dim);">
-      <span class="text-xs tracking-widest uppercase">Scroll</span>
-      <div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1.5">
-        <div class="w-1 h-2 rounded-full bg-white/30 animate-bounce"></div>
-      </div>
-    </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-fade-in opacity-0" style="animation-delay:1.2s">
+    <div class="flex flex-col items-center gap-2" style="color:var(--text-dim)"><span class="text-xs tracking-widest uppercase">Scroll</span><div class="w-5 h-8 rounded-full border border-white/10 flex items-start justify-center p-1.5"><div class="w-1 h-2 rounded-full bg-white/30 animate-bounce"></div></div></div>
   </div>
 </section>
 
-<!-- ==================== VAULT SECTION ==================== -->
+<!-- VAULT -->
 <section id="vault" class="relative py-20 sm:py-32">
   <div class="max-w-7xl mx-auto px-5 sm:px-8">
-    <!-- Section Header -->
     <div class="text-center mb-12 sm:mb-16">
       <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight mb-4">The <span class="gold-shimmer">Vault</span></h2>
-      <p class="text-base sm:text-lg font-light" style="color: var(--text-secondary);">Every product. Its real cost. The markup they don't want you to see.</p>
+      <p class="text-base sm:text-lg font-light" style="color:var(--text-secondary)">Every product. Its real cost. The markup they don't want you to see.</p>
     </div>
-
-    <!-- Search & Filters -->
-    <div class="mb-10 sm:mb-14 space-y-5">
+    <div class="mb-10 sm:mb-14 space-y-4">
       <!-- Search -->
       <div class="relative max-w-2xl mx-auto">
-        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style="color: var(--text-dim);"></i>
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search products, brands, categories..."
-          class="w-full pl-12 pr-12 py-4 rounded-2xl text-sm sm:text-base outline-none transition-all duration-300 focus:ring-2"
-          style="background: var(--vault-card); border: 1px solid var(--vault-border); color: var(--text-primary); --tw-ring-color: rgba(212,168,67,0.3);"
-          oninput="filterProducts()"
-        >
-        <button id="clearSearch" class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-colors hover:bg-white/10 hidden" style="color: var(--text-dim);" onclick="clearSearch()">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style="color:var(--text-dim)"></i>
+        <input type="text" id="searchInput" placeholder="Search products, brands, categories..." class="w-full pl-12 pr-12 py-4 rounded-2xl text-sm sm:text-base outline-none transition-all duration-300 focus:ring-2" style="background:var(--vault-card);border:1px solid var(--vault-border);color:var(--text-primary);--tw-ring-color:rgba(212,168,67,.3)" oninput="debounceSearch()">
+        <button id="clearSearch" class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-colors hover:bg-white/10 hidden" style="color:var(--text-dim)" onclick="clearSearch()"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-
-      <!-- Category Filters -->
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-3" id="filterContainer">
-        <button class="filter-btn active px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors" style="color: var(--gold);" data-category="all" onclick="setCategory('all', this)">
-          All Products
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="fashion" onclick="setCategory('fashion', this)">
-          👟 Fashion
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="electronics" onclick="setCategory('electronics', this)">
-          📱 Electronics
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="cosmetics" onclick="setCategory('cosmetics', this)">
-          💄 Cosmetics
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="food" onclick="setCategory('food', this)">
-          🍔 Food & Drink
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="health" onclick="setCategory('health', this)">
-          💊 Health
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="services" onclick="setCategory('services', this)">
-          🏨 Services
-        </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs sm:text-sm font-medium" style="color: var(--text-secondary);" data-category="education" onclick="setCategory('education', this)">
-          📚 Education
-        </button>
-      </div>
-
-      <!-- Sort -->
-      <div class="flex items-center justify-center gap-3">
-        <span class="text-xs" style="color: var(--text-dim);">Sort by:</span>
-        <select id="sortSelect" onchange="filterProducts()" class="text-xs sm:text-sm px-3 py-1.5 rounded-lg outline-none cursor-pointer" style="background: var(--vault-card); border: 1px solid var(--vault-border); color: var(--text-secondary);">
+      <!-- Filters Row: Dropdown + Sort + Random -->
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <!-- Category Dropdown -->
+        <div class="relative">
+          <select id="categorySelect" onchange="setCategory(this.value)" class="cat-select text-sm px-4 py-2.5 pr-10 rounded-xl outline-none cursor-pointer min-w-[180px]" style="background:var(--vault-card);border:1px solid var(--vault-border);color:var(--text-secondary)">
+            <option value="all">All Categories</option>
+            <option value="fashion">Fashion</option>
+            <option value="electronics">Electronics</option>
+            <option value="cosmetics">Cosmetics</option>
+            <option value="food">Food & Drink</option>
+            <option value="health">Health</option>
+            <option value="services">Services</option>
+            <option value="education">Education</option>
+          </select>
+        </div>
+        <!-- Sort Dropdown -->
+        <select id="sortSelect" onchange="filterProducts()" class="cat-select text-sm px-4 py-2.5 pr-10 rounded-xl outline-none cursor-pointer" style="background:var(--vault-card);border:1px solid var(--vault-border);color:var(--text-secondary)">
           <option value="markup-desc">Highest Markup</option>
           <option value="markup-asc">Lowest Markup</option>
-          <option value="name-asc">A → Z</option>
-          <option value="name-desc">Z → A</option>
+          <option value="name-asc">A to Z</option>
+          <option value="name-desc">Z to A</option>
           <option value="price-desc">Most Expensive</option>
           <option value="price-asc">Cheapest</option>
         </select>
+        <!-- Random Button -->
+        <button onclick="openRandomProduct()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105" style="border:1px solid rgba(212,168,67,.25);color:var(--gold);background:rgba(212,168,67,.05)">
+          <i data-lucide="shuffle" class="w-4 h-4"></i>Surprise Me
+        </button>
       </div>
+      <!-- Category count pills (quick filter chips below dropdowns) -->
+      <div class="flex flex-wrap justify-center gap-2" id="categoryChips"></div>
     </div>
-
-    <!-- Results Count -->
-    <div class="mb-6 text-sm" style="color: var(--text-dim);">
-      <span id="resultCount">0</span> products exposed
-    </div>
-
-    <!-- Product Grid -->
-    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-      <!-- Cards injected by JS -->
-    </div>
-
-    <!-- Empty State -->
+    <div class="mb-6 text-sm" style="color:var(--text-dim)"><span id="resultCount">0</span> products exposed</div>
+    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"></div>
     <div id="emptyState" class="hidden text-center py-20">
-      <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: rgba(212,168,67,0.05); border: 1px solid rgba(212,168,67,0.1);">
-        <i data-lucide="search-x" class="w-8 h-8" style="color: var(--text-dim);"></i>
-      </div>
-      <h3 class="text-xl font-semibold mb-2" style="color: var(--text-secondary);">No products found</h3>
-      <p class="text-sm" style="color: var(--text-dim);">Try a different search term or category</p>
+      <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:rgba(212,168,67,.05);border:1px solid rgba(212,168,67,.1)"><i data-lucide="search-x" class="w-8 h-8" style="color:var(--text-dim)"></i></div>
+      <h3 class="text-xl font-semibold mb-2" style="color:var(--text-secondary)">No products found</h3>
+      <p class="text-sm mb-4" style="color:var(--text-dim)">Try a different search term or category</p>
+      <button onclick="openRandomProduct()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium" style="border:1px solid rgba(212,168,67,.25);color:var(--gold);background:rgba(212,168,67,.05)"><i data-lucide="shuffle" class="w-4 h-4"></i>Show me a random product</button>
     </div>
   </div>
 </section>
 
-<!-- ==================== LEADERBOARD ==================== -->
-<section id="leaderboard" class="relative py-20 sm:py-32" style="background: linear-gradient(180deg, transparent, rgba(212,168,67,0.02), transparent);">
+<!-- LEADERBOARD -->
+<section id="leaderboard" class="relative py-20 sm:py-32" style="background:linear-gradient(180deg,transparent,rgba(212,168,67,.02),transparent)">
   <div class="max-w-4xl mx-auto px-5 sm:px-8">
     <div class="text-center mb-12 sm:mb-16">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase mb-4" style="color: #EF4444; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.15);">
-        <i data-lucide="flame" class="w-3.5 h-3.5"></i>
-        Hall of Shame
-      </div>
-      <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight mb-4">Biggest <span style="color: #EF4444;">Markups</span></h2>
-      <p class="text-base sm:text-lg font-light" style="color: var(--text-secondary);">The most outrageous price gouging in the vault.</p>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase mb-4" style="color:#EF4444;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15)"><i data-lucide="flame" class="w-3.5 h-3.5"></i>Hall of Shame</div>
+      <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight mb-4">Biggest <span style="color:#EF4444">Markups</span></h2>
+      <p class="text-base sm:text-lg font-light" style="color:var(--text-secondary)">The most outrageous price gouging in the vault.</p>
     </div>
-
-    <div id="leaderboardList" class="space-y-3">
-      <!-- Injected by JS -->
-    </div>
+    <div id="leaderboardList" class="space-y-3"></div>
   </div>
 </section>
 
-<!-- ==================== QUIZ ==================== -->
+<!-- QUIZ -->
 <section id="quiz" class="relative py-20 sm:py-32">
   <div class="max-w-2xl mx-auto px-5 sm:px-8">
     <div class="text-center mb-12 sm:mb-16">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase mb-4" style="color: var(--gold); background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.15);">
-        <i data-lucide="brain" class="w-3.5 h-3.5"></i>
-        Challenge
-      </div>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase mb-4" style="color:var(--gold);background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.15)"><i data-lucide="brain" class="w-3.5 h-3.5"></i>Challenge</div>
       <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight mb-4">Guess the <span class="gold-shimmer">Markup</span></h2>
-      <p class="text-base sm:text-lg font-light" style="color: var(--text-secondary);">Think you know what things cost to make? Prove it.</p>
+      <p class="text-base sm:text-lg font-light" style="color:var(--text-secondary)">Think you know what things cost to make? Prove it.</p>
     </div>
-
-    <!-- Quiz Container -->
-    <div id="quizContainer" class="rounded-3xl p-6 sm:p-10" style="background: var(--vault-card); border: 1px solid var(--vault-border);">
-      <!-- Quiz Start -->
+    <div id="quizContainer" class="rounded-3xl p-6 sm:p-10" style="background:var(--vault-card);border:1px solid var(--vault-border)">
       <div id="quizStart" class="text-center py-8">
-        <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.15); animation: pulse-gold 3s infinite;">
-          <i data-lucide="trophy" class="w-9 h-9" style="color: var(--gold);"></i>
-        </div>
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.15);animation:pulse-gold 3s infinite"><i data-lucide="trophy" class="w-9 h-9" style="color:var(--gold)"></i></div>
         <h3 class="text-2xl font-bold mb-3">Ready to Be Shocked?</h3>
-        <p class="text-sm mb-8 max-w-md mx-auto" style="color: var(--text-secondary);">We'll show you a product's retail price. You guess the actual manufacturing cost. 10 questions. See how many you get right.</p>
-        <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));">
-          <i data-lucide="play" class="w-4 h-4"></i>
-          Start Quiz
-        </button>
+        <p class="text-sm mb-8 max-w-md mx-auto" style="color:var(--text-secondary)">We'll show you a product's retail price. You guess the actual manufacturing cost. 10 questions.</p>
+        <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark))"><i data-lucide="play" class="w-4 h-4"></i>Start Quiz</button>
       </div>
-
-      <!-- Quiz Active -->
       <div id="quizActive" class="hidden">
-        <div class="flex items-center justify-between mb-6">
-          <span class="text-sm font-medium" style="color: var(--text-secondary);">Question <span id="quizCurrent">1</span>/10</span>
-          <span class="text-sm font-mono font-bold" style="color: var(--gold);">Score: <span id="quizScore">0</span></span>
-        </div>
-        <div class="w-full h-1.5 rounded-full mb-8" style="background: var(--vault-border);">
-          <div id="quizProgress" class="h-full rounded-full transition-all duration-500" style="background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 10%;"></div>
-        </div>
-
+        <div class="flex items-center justify-between mb-6"><span class="text-sm font-medium" style="color:var(--text-secondary)">Question <span id="quizCurrent">1</span>/10</span><span class="text-sm font-mono font-bold" style="color:var(--gold)">Score: <span id="quizScore">0</span></span></div>
+        <div class="w-full h-1.5 rounded-full mb-8" style="background:var(--vault-border)"><div id="quizProgress" class="h-full rounded-full transition-all duration-500" style="background:linear-gradient(90deg,var(--gold),var(--gold-light));width:10%"></div></div>
         <div id="quizProduct" class="text-center mb-8">
-          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-3xl" style="background: rgba(255,255,255,0.03); border: 1px solid var(--vault-border);" id="quizEmoji">👟</div>
-          <h3 class="text-xl sm:text-2xl font-bold mb-2" id="quizProductName">Product Name</h3>
-          <p class="text-sm" style="color: var(--text-dim);" id="quizBrand">Brand Name</p>
-          <div class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full" style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.15);">
-            <span class="text-xs" style="color: var(--text-dim);">Retail Price:</span>
-            <span class="text-lg font-bold text-red-500 font-mono" id="quizRetailPrice">₹0</span>
-          </div>
-          <p class="mt-4 text-sm font-medium" style="color: var(--text-secondary);">What's the actual cost to make this?</p>
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)" id="quizEmoji"></div>
+          <h3 class="text-xl sm:text-2xl font-bold mb-2" id="quizProductName"></h3>
+          <p class="text-sm" style="color:var(--text-dim)" id="quizBrand"></p>
+          <div class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15)"><span class="text-xs" style="color:var(--text-dim)">Retail Price:</span><span class="text-lg font-bold text-red-500 font-mono" id="quizRetailPrice"></span></div>
+          <p class="mt-4 text-sm font-medium" style="color:var(--text-secondary)">What is the actual cost to make this?</p>
         </div>
-
-        <div id="quizOptions" class="grid grid-cols-2 gap-3 mb-6">
-          <!-- Options injected by JS -->
-        </div>
-
-        <div id="quizFeedback" class="hidden text-center py-4 rounded-2xl mb-6" style="background: rgba(255,255,255,0.02); border: 1px solid var(--vault-border);">
-          <p id="quizFeedbackText" class="text-sm font-medium"></p>
-          <p id="quizFactText" class="text-xs mt-2" style="color: var(--text-dim);"></p>
-        </div>
-
-        <button id="quizNextBtn" class="hidden w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90" style="background: var(--vault-border); color: var(--text-secondary);" onclick="nextQuizQuestion()">
-          Next Question →
-        </button>
+        <div id="quizOptions" class="grid grid-cols-2 gap-3 mb-6"></div>
+        <div id="quizFeedback" class="hidden text-center py-4 rounded-2xl mb-6" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><p id="quizFeedbackText" class="text-sm font-medium"></p><p id="quizFactText" class="text-xs mt-2" style="color:var(--text-dim)"></p></div>
+        <button id="quizNextBtn" class="hidden w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90" style="background:var(--vault-border);color:var(--text-secondary)" onclick="nextQuizQuestion()">Next Question</button>
       </div>
-
-      <!-- Quiz Result -->
       <div id="quizResult" class="hidden text-center py-8">
-        <div class="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" id="quizResultIcon" style="background: rgba(212,168,67,0.1); border: 2px solid var(--gold);">
-          <i data-lucide="trophy" class="w-10 h-10" style="color: var(--gold);"></i>
-        </div>
-        <h3 class="text-3xl font-bold mb-2" id="quizResultTitle">Amazing!</h3>
-        <p class="text-lg mb-2" style="color: var(--text-secondary);">You scored</p>
-        <div class="text-5xl font-bold font-mono mb-2" style="color: var(--gold);" id="quizFinalScore">0/10</div>
-        <p class="text-sm mb-8 max-w-md mx-auto" style="color: var(--text-dim);" id="quizResultMessage">Message here</p>
+        <div class="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" id="quizResultIcon" style="background:rgba(212,168,67,.1);border:2px solid var(--gold)"><i data-lucide="trophy" class="w-10 h-10" style="color:var(--gold)"></i></div>
+        <h3 class="text-3xl font-bold mb-2" id="quizResultTitle"></h3>
+        <p class="text-lg mb-2" style="color:var(--text-secondary)">You scored</p>
+        <div class="text-5xl font-bold font-mono mb-2" style="color:var(--gold)" id="quizFinalScore"></div>
+        <p class="text-sm mb-8 max-w-md mx-auto" style="color:var(--text-dim)" id="quizResultMessage"></p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));">
-            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-            Play Again
-          </button>
-          <button onclick="scrollToSection('vault')" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium border transition-all duration-300 hover:bg-white/5" style="border-color: var(--vault-border); color: var(--text-secondary);">
-            Explore Vault
-          </button>
+          <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark))"><i data-lucide="rotate-ccw" class="w-4 h-4"></i>Play Again</button>
+          <button onclick="smoothNav(null,'#vault')" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium border transition-all duration-300 hover:bg-white/5" style="border-color:var(--vault-border);color:var(--text-secondary)">Explore Vault</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== ABOUT ==================== -->
-<section id="about" class="relative py-20 sm:py-32" style="background: linear-gradient(180deg, transparent, rgba(212,168,67,0.02), transparent);">
+<!-- ABOUT + DISCLAIMER -->
+<section id="about" class="relative py-20 sm:py-32" style="background:linear-gradient(180deg,transparent,rgba(212,168,67,.02),transparent)">
   <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
     <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-6">Why This <span class="gold-shimmer">Exists</span></h2>
-    <p class="text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto mb-12" style="color: var(--text-secondary);">
-      Every day, billions of people buy things without knowing what they actually cost to make. This vault exists to change that — one product at a time. All data is sourced from publicly available industry reports, teardown analyses, investigative journalism, and manufacturing insights.
-    </p>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="rounded-2xl p-6" style="background: var(--vault-card); border: 1px solid var(--vault-border);">
-        <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.15);">
-          <i data-lucide="file-check" class="w-5 h-5 text-green-500"></i>
-        </div>
-        <h3 class="font-semibold mb-2">Verified Sources</h3>
-        <p class="text-xs leading-relaxed" style="color: var(--text-dim);">Every data point links to its source — industry reports, teardowns, journalism</p>
+    <p class="text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto mb-12" style="color:var(--text-secondary)">Every day, billions of people buy things without knowing what they actually cost to make. This vault exists to change that.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-14">
+      <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15)"><i data-lucide="file-check" class="w-5 h-5 text-green-500"></i></div><h3 class="font-semibold mb-2">Researched Data</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Cost figures derived from publicly available industry reports, teardowns, and wholesale pricing</p></div>
+      <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.15)"><i data-lucide="database" class="w-5 h-5" style="color:var(--gold)"></i></div><h3 class="font-semibold mb-2">Growing Database</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">New products added regularly. The vault never stops growing.</p></div>
+      <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15)"><i data-lucide="shield-alert" class="w-5 h-5 text-red-500"></i></div><h3 class="font-semibold mb-2">No Sponsorships</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Not affiliated with any brand. Independent research, no bias.</p></div>
+    </div>
+    <!-- DISCLAIMER - Scrollable -->
+    <div class="max-w-2xl mx-auto rounded-2xl overflow-hidden" style="background:rgba(255,255,255,.015);border:1px solid var(--vault-border)">
+      <div class="flex items-center gap-3 px-6 py-4" style="border-bottom:1px solid var(--vault-border)">
+        <i data-lucide="shield-info" class="w-5 h-5 shrink-0" style="color:var(--text-dim)"></i>
+        <span class="text-sm font-semibold" style="color:var(--text-secondary)">Disclaimer and Data Transparency</span>
+        <span class="text-[10px] px-2 py-0.5 rounded-full ml-auto shrink-0" style="background:rgba(212,168,67,.08);color:var(--gold);border:1px solid rgba(212,168,67,.15)">Scroll to read</span>
       </div>
-      <div class="rounded-2xl p-6" style="background: var(--vault-card); border: 1px solid var(--vault-border);">
-        <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.15);">
-          <i data-lucide="database" class="w-5 h-5" style="color: var(--gold);"></i>
+      <div class="disclaimer-scroll px-6 py-5">
+        <div class="space-y-3 text-xs sm:text-sm leading-relaxed" style="color:var(--text-dim)">
+          <p>All manufacturing cost estimates presented on this website are based on independent online research compiled from publicly available industry reports, product teardown analyses, wholesale marketplace pricing, investigative journalism, and commodity price data. These figures represent <strong style="color:var(--text-secondary)">approximate averages</strong> derived from multiple sources and should <strong style="color:var(--text-secondary)">not be treated as exact or definitive manufacturing costs</strong>.</p>
+          <p>Actual production costs may vary significantly based on factors including but not limited to: raw material price fluctuations, manufacturing location and scale, order volume, time period, supply chain conditions, proprietary manufacturing processes, and currency exchange rates. The "cost to make" shown here typically reflects estimated material and direct labor costs only. It does not account for research and development, marketing, distribution, logistics, retail margins, taxes, or other overhead expenses that contribute to the final retail price.</p>
+          <p>Markup percentages displayed are calculated purely as the mathematical difference between the stated estimated cost and the stated retail price, and are presented for <strong style="color:var(--text-secondary)">informational and educational purposes only</strong>. They are not intended to imply that any brand or retailer is engaging in unfair or deceptive pricing practices.</p>
+          <p><strong style="color:var(--text-secondary)">Find Deal Vault</strong> makes no warranties, express or implied, regarding the accuracy, completeness, or reliability of any cost estimate published on this site. We shall not be held liable for any discrepancies between the figures presented here and actual manufacturing costs, nor for any decisions made based on this information. Users are encouraged to conduct their own independent research before drawing conclusions.</p>
+          <p>All brand names, product names, and trademarks are the property of their respective owners. Their use here is purely for identification and informational purposes and does not imply endorsement or affiliation.</p>
         </div>
-        <h3 class="font-semibold mb-2">Growing Database</h3>
-        <p class="text-xs leading-relaxed" style="color: var(--text-dim);">New products added regularly. The vault never stops growing.</p>
-      </div>
-      <div class="rounded-2xl p-6" style="background: var(--vault-card); border: 1px solid var(--vault-border);">
-        <div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.15);">
-          <i data-lucide="shield-alert" class="w-5 h-5 text-red-500"></i>
-        </div>
-        <h3 class="font-semibold mb-2">No Sponsorships</h3>
-        <p class="text-xs leading-relaxed" style="color: var(--text-dim);">Not affiliated with any brand. Pure data, no bias.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== FOOTER ==================== -->
-<footer class="py-10 border-t" style="border-color: var(--vault-border);">
+<!-- FOOTER -->
+<footer class="py-10 border-t" style="border-color:var(--vault-border)">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
     <div class="flex items-center gap-2">
-      <div class="w-6 h-6 rounded flex items-center justify-center" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark));">
-        <i data-lucide="lock-keyhole" class="w-3 h-3 text-black"></i>
-      </div>
-      <span class="text-sm font-semibold">FindDeal<span style="color: var(--gold);">Vault</span></span>
+      <div class="w-6 h-6 rounded flex items-center justify-center" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark))"><i data-lucide="lock-keyhole" class="w-3 h-3 text-black"></i></div>
+      <span class="text-sm font-semibold">FindDeal<span style="color:var(--gold)">Vault</span></span>
     </div>
-    <p class="text-xs" style="color: var(--text-dim);">The real deal is what they're not telling you. © 2025</p>
+    <p class="text-xs text-center" style="color:var(--text-dim)">The real deal is what they are not telling you. 2025. Cost figures are approximate estimates.</p>
     <div class="flex items-center gap-4">
-      <a href="#" class="text-xs transition-colors hover:text-white" style="color: var(--text-dim);">Privacy</a>
-      <a href="#" class="text-xs transition-colors hover:text-white" style="color: var(--text-dim);">Sources</a>
-      <a href="#" class="text-xs transition-colors hover:text-white" style="color: var(--text-dim);">Contact</a>
+      <a href="#about" onclick="smoothNav(event,'#about');return false;" class="text-xs transition-colors hover:text-white" style="color:var(--text-dim)">Disclaimer</a>
+      <a href="#" class="text-xs transition-colors hover:text-white" style="color:var(--text-dim)">Sources</a>
+      <a href="#" class="text-xs transition-colors hover:text-white" style="color:var(--text-dim)">Contact</a>
     </div>
   </div>
 </footer>
 
-<!-- ==================== PRODUCT DETAIL MODAL ==================== -->
+<!-- BACK TO TOP BUTTON -->
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));box-shadow:0 4px 20px rgba(212,168,67,.3)">
+  <i data-lucide="arrow-up" class="w-5 h-5 text-black"></i>
+</button>
+
+<!-- MODAL -->
 <div id="productModal" class="fixed inset-0 z-[100] hidden">
-  <div class="modal-overlay absolute inset-0" style="background: rgba(0,0,0,0.7);" onclick="closeModal()"></div>
+  <div class="modal-overlay absolute inset-0" style="background:rgba(0,0,0,.7)" onclick="closeModal()"></div>
   <div class="relative z-10 flex items-center justify-center min-h-screen p-4 sm:p-8">
-    <div id="modalContent" class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl animate-scale-in" style="background: var(--vault-card); border: 1px solid var(--vault-border);">
-      <!-- Injected by JS -->
-    </div>
+    <div id="modalContent" class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl animate-scale-in" style="background:var(--vault-card);border:1px solid var(--vault-border)"></div>
   </div>
 </div>
 
-<!-- ==================== TOAST CONTAINER ==================== -->
+<!-- TOAST -->
 <div id="toastContainer" class="fixed top-24 right-4 z-[200] space-y-2"></div>
 
-<!-- ==================== JAVASCRIPT ==================== -->
+<!-- ==================== MAIN APPLICATION SCRIPT ==================== -->
 <script>
-// ============================================================
-// DATA — Add your products here. This is your goldmine.
-// Copy the structure, fill in real data, and the site updates automatically.
-// ============================================================
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Designer Sunglasses",
-    brand: "Premium Luxury Brands",
-    emoji: "🕶️",
-    category: "fashion",
-    costPrice: 500,
-    retailPrice: 25000,
-    currency: "₹",
-    madeIn: "Italy / China",
-    materials: "Plastic/frame: ₹200, Lenses: ₹150, Packaging: ₹50, Labor: ₹100",
-    story: "Most designer sunglasses are made by the same Italian company — Luxottica — which owns Ray-Ban, Oakley, and makes glasses for Chanel, Prada, Versace, and dozens more. The markup is almost entirely brand perception.",
-    source: "Industry reports, Luxottica annual filings",
-    tags: ["luxury", "sunglasses", "eyewear", "luxottica"]
-  },
-  {
-    id: 2,
-    name: "Bottled Water (1L)",
-    brand: "Major Bottled Brands",
-    emoji: "💧",
-    category: "food",
-    costPrice: 0.25,
-    retailPrice: 20,
-    currency: "₹",
-    madeIn: "Local bottling plants",
-    materials: "Water: ₹0.05, Bottle: ₹0.10, Label: ₹0.05, Filtration: ₹0.05",
-    story: "Bottled water costs roughly 2000x more than tap water for essentially the same product. In many cases, it's literally filtered municipal tap water sold in plastic. The real cost is marketing and distribution.",
-    source: "Consumer Reports, municipal water analysis",
-    tags: ["water", "beverage", "packaged", "overpriced"]
-  },
-  {
-    id: 3,
-    name: "Apple Lightning Cable",
-    brand: "Apple (Official)",
-    emoji: "🔌",
-    category: "electronics",
-    costPrice: 150,
-    retailPrice: 1900,
-    currency: "₹",
-    madeIn: "China",
-    materials: "Wire & connectors: ₹80, Chip: ₹30, Packaging: ₹20, Labor: ₹20",
-    story: "Apple's MFi (Made for iPhone) certification adds significant cost. Third-party cables with identical internals cost a fraction. The cable itself uses standard USB components with an authentication chip.",
-    source: "iFixit teardowns, component pricing",
-    tags: ["apple", "cable", "accessory", "mfi"]
-  },
-  {
-    id: 4,
-    name: "Movie Theatre Popcorn",
-    brand: "Cinema Chains",
-    emoji: "🍿",
-    category: "food",
-    costPrice: 8,
-    retailPrice: 300,
-    currency: "₹",
-    madeIn: "In-house",
-    materials: "Corn kernels: ₹3, Oil: ₹2, Butter/salt: ₹1, Bag: ₹2",
-    story: "Movie theatres don't make money on tickets — most of that goes to studios. Popcorn and drinks are where the real profit is. A large popcorn has an estimated markup of 3,000%+.",
-    source: "Theatre industry financial reports, Stanford research",
-    tags: ["popcorn", "cinema", "food", "theatre"]
-  },
-  {
-    id: 5,
-    name: "Designer Handbag",
-    brand: "Top Luxury Fashion House",
-    emoji: "👜",
-    category: "fashion",
-    costPrice: 8000,
-    retailPrice: 300000,
-    currency: "₹",
-    madeIn: "Italy",
-    materials: "Leather: ₹3000, Hardware: ₹1500, Labor: ₹2000, Packaging: ₹500, Overhead: ₹1000",
-    story: "Luxury handbags are one of the highest-markup consumer products. You're paying for brand heritage, exclusivity perception, and the cost of maintaining boutiques in the world's most expensive locations.",
-    source: "Luxury goods industry analysis, Bloomberg",
-    tags: ["luxury", "handbag", "leather", "fashion"]
-  },
-  {
-    id: 6,
-    name: "Printer Ink (Cartridge)",
-    brand: "HP / Canon / Epson",
-    emoji: "🖨️",
-    category: "electronics",
-    costPrice: 200,
-    retailPrice: 2500,
-    currency: "₹",
-    madeIn: "China / Malaysia",
-    materials: "Ink fluid: ₹50, Plastic cartridge: ₹80, Chip: ₹40, Packaging: ₹30",
-    story: "Printer ink is famously one of the most expensive liquids on Earth — roughly ₹6,00,000 per liter when you do the math. Printer manufacturers sell printers at near-loss and make profits on ink. Some cartridges even have chips that stop working after a set number of prints.",
-    source: "Which? Magazine, Consumer Reports, iFixit",
-    tags: ["printer", "ink", "cartridge", "expensive"]
-  },
-  {
-    id: 7,
-    name: "College Textbook",
-    brand: "Major Academic Publishers",
-    emoji: "📚",
-    category: "education",
-    costPrice: 250,
-    retailPrice: 4500,
-    currency: "₹",
-    madeIn: "Various",
-    materials: "Printing: ₹100, Paper: ₹80, Binding: ₹30, Author royalty: ₹40",
-    story: "Academic publishers have a captive market — students MUST buy specific books. New editions are released frequently with minor changes to kill the used book market. The content costs almost nothing to update digitally.",
-    source: "US GAO report on textbook pricing, student advocacy data",
-    tags: ["textbook", "college", "education", "publishing"]
-  },
-  {
-    id: 8,
-    name: "Brand Name Painkiller",
-    brand: "Major Pharma (vs Generic)",
-    emoji: "💊",
-    category: "health",
-    costPrice: 3,
-    retailPrice: 45,
-    currency: "₹",
-    madeIn: "India / Various",
-    materials: "Active ingredient (ibuprofen/paracetamol): ₹1, Binders: ₹0.50, Coating: ₹0.50, Packaging: ₹1",
-    story: "Generic and brand-name painkillers contain the EXACT same active ingredient in the EXACT same dosage. The difference is packaging, marketing, and brand trust. In many countries, pharmacists are required to inform you of the generic alternative.",
-    source: "FDA guidelines, pharma industry reports",
-    tags: ["medicine", "pharma", "painkiller", "generic"]
-  },
-  {
-    id: 9,
-    name: "Hotel Mini-Bar Soda",
-    brand: "Hotels Worldwide",
-    emoji: "🏨",
-    category: "services",
-    costPrice: 10,
-    retailPrice: 350,
-    currency: "₹",
-    madeIn: "Purchased wholesale",
-    materials: "Soda can (wholesale): ₹10",
-    story: "Hotels charge 30-50x the wholesale price for mini-bar items. The real 'product' is convenience and the captive audience. Many travelers now check mini-bar prices before booking — some hotels charge ₹800 for a ₹30 water bottle.",
-    source: "Hotel industry pricing studies, travel surveys",
-    tags: ["hotel", "minibar", "travel", "overpriced"]
-  },
-  {
-    id: 10,
-    name: "Eyeglasses (Prescription)",
-    brand: "Major Optical Chains",
-    emoji: "👓",
-    category: "fashion",
-    costPrice: 400,
-    retailPrice: 12000,
-    currency: "₹",
-    madeIn: "China / Local labs",
-    materials: "Frame: ₹150, Lenses: ₹150, Coating: ₹50, Case: ₹30, Labor: ₹20",
-    story: "The eyewear industry is dominated by a single company (EssilorLuxottica) that owns most major brands and retail chains. A pair of glasses that costs ₹400 to produce routinely sells for ₹10,000-30,000. Online disruptors have proven the real cost is a fraction.",
-    source: "60 Minutes investigation, EssilorLuxottica filings",
-    tags: ["glasses", "eyewear", "optical", "prescription"]
-  },
-  {
-    id: 11,
-    name: "Cosmetics Lipstick",
-    brand: "Premium Beauty Brands",
-    emoji: "💄",
-    category: "cosmetics",
-    costPrice: 35,
-    retailPrice: 1200,
-    currency: "₹",
-    madeIn: "Various (often same factories as drugstore brands)",
-    materials: "Wax: ₹5, Pigments: ₹8, Oils: ₹5, Fragrance: ₹2, Tube: ₹10, Packaging: ₹5",
-    story: "Many luxury and drugstore lipsticks are made in the SAME factories with VERY similar formulations. The ₹1200 lipstick might cost ₹35 to make while the ₹200 drugstore version costs ₹20. You're primarily paying for the packaging and brand name.",
-    source: "Cosmetic formulation analysis, industry insiders",
-    tags: ["lipstick", "cosmetics", "beauty", "makeup"]
-  },
-  {
-    id: 12,
-    name: "Gym Membership",
-    brand: "Commercial Gym Chains",
-    emoji: "🏋️",
-    category: "services",
-    costPrice: 150,
-    retailPrice: 2500,
-    currency: "₹",
-    madeIn: "N/A — Service",
-    materials: "Per-member monthly cost: Equipment amortization: ₹50, Electricity: ₹30, Staff per member: ₹40, Maintenance: ₹30",
-    story: "Gyms survive on the fact that 67% of members never go. If everyone who signed up actually showed up, the gym would be overcrowded and unprofitable. The business model literally banks on you NOT using what you pay for.",
-    source: "Gym industry financial models, fitness research studies",
-    tags: ["gym", "fitness", "membership", "service"]
-  },
-  {
-    id: 13,
-    name: "Smartphone Case",
-    brand: "Branded / Retail Store",
-    emoji: "📱",
-    category: "electronics",
-    costPrice: 25,
-    retailPrice: 999,
-    currency: "₹",
-    madeIn: "China",
-    materials: "Silicone/TPU: ₹10, Mold cost amortized: ₹5, Packaging: ₹5, Shipping: ₹5",
-    story: "Phone cases from retail stores or brand official stores have insane markups. The same quality case costs ₹100-150 online. The retail markup exists because they know you just spent ₹80,000 on a phone and want to protect it immediately.",
-    source: "Alibaba/wholesale pricing, retail markup analysis",
-    tags: ["phone", "case", "accessory", "smartphone"]
-  },
-  {
-    id: 14,
-    name: "Wedding Dress",
-    brand: "Bridal Boutiques",
-    emoji: "👰",
-    category: "fashion",
-    costPrice: 8000,
-    retailPrice: 80000,
-    currency: "₹",
-    madeIn: "China / India / Local",
-    materials: "Fabric: ₹3000, Lace/embellishments: ₹2000, Labor: ₹2000, Fitting/alterations: ₹1000",
-    story: "The word 'wedding' increases prices by 200-500%. The same quality dress without the 'bridal' label would cost a fraction. The industry relies on emotional purchasing — brides are told 'you only do this once' to justify spending.",
-    source: "Bridal industry reports, wedding planning surveys",
-    tags: ["wedding", "dress", "bridal", "fashion"]
-  },
-  {
-    id: 15,
-    name: "Coffee at Cafe",
-    brand: "Major Coffee Chains",
-    emoji: "☕",
-    category: "food",
-    costPrice: 18,
-    retailPrice: 350,
-    currency: "₹",
-    madeIn: "In-store",
-    materials: "Coffee beans (per cup): ₹8, Milk: ₹5, Cup/lid: ₹3, Sugar/flavoring: ₹2",
-    story: "A ₹350 cappuccino uses about ₹18 worth of ingredients. You're paying for the barista, the rent at a premium location, the ambiance, the Wi-Fi, and the brand. At home, the same drink costs under ₹25 to make.",
-    source: "Coffee industry cost breakdown, specialty coffee analysis",
-    tags: ["coffee", "cafe", "beverage", "restaurant"]
-  },
-  {
-    id: 16,
-    name: "Diamond Ring",
-    brand: "Jewelry Brands",
-    emoji: "💍",
-    category: "fashion",
-    costPrice: 40000,
-    retailPrice: 200000,
-    currency: "₹",
-    madeIn: "India (Surat cutting) / Various",
-    materials: "Rough diamond: ₹25000, Cutting/polishing: ₹8000, Gold setting: ₹5000, Certification: ₹2000",
-    story: "Diamonds are not rare — De Beers controlled supply for decades to create artificial scarcity. The resale value of a diamond ring is typically 20-40% of retail price. Lab-grown diamonds with identical properties cost 60-80% less.",
-    source: "GIA reports, diamond industry analysis, De Beers history",
-    tags: ["diamond", "jewelry", "ring", "luxury", "debeers"]
-  },
-  {
-    id: 17,
-    name: "Brand Name Sneakers",
-    brand: "Major Athletic Brands",
-    emoji: "👟",
-    category: "fashion",
-    costPrice: 1200,
-    retailPrice: 15000,
-    currency: "₹",
-    madeIn: "Vietnam / Indonesia / China",
-    materials: "Upper material: ₹300, Sole: ₹400, Insole: ₹100, Labor: ₹250, Packaging: ₹50, Shipping: ₹100",
-    story: "A ₹15,000 sneaker typically costs ₹1,000-1,500 to manufacture. The factory worker who makes it earns roughly ₹500-800 per day. Marketing and athlete endorsements make up a huge portion of the retail price. Some 'limited edition' drops resell for 5-10x retail.",
-    source: "Sneaker manufacturing cost analysis, factory wage reports",
-    tags: ["sneakers", "shoes", "athletic", "brand"]
-  },
-  {
-    id: 18,
-    name: "Cable TV Subscription",
-    brand: "Major TV Providers",
-    emoji: "📺",
-    category: "services",
-    costPrice: 80,
-    retailPrice: 600,
-    currency: "₹",
-    madeIn: "N/A — Service",
-    materials: "Per-channel content cost: ₹40, Infrastructure per user: ₹25, Customer service: ₹15",
-    story: "Cable TV forces you to buy 200+ channels when you watch 5-10. The per-channel cost breakdown shows you're paying ₹600 for content worth ₹80. This is exactly why streaming services killed cable — people finally realized they were paying for things they never used.",
-    source: "Cable industry economics, cord-cutting analysis",
-    tags: ["cable", "tv", "subscription", "service"]
-  },
-  {
-    id: 19,
-    name: "Face Moisturizer",
-    brand: "Premium Skincare Brands",
-    emoji: "🧴",
-    category: "cosmetics",
-    costPrice: 45,
-    retailPrice: 2500,
-    currency: "₹",
-    madeIn: "Various (often same contract manufacturers)",
-    materials: "Base (water/glycerin): ₹10, Active ingredients: ₹15, Emulsifiers: ₹5, Preservatives: ₹3, Jar: ₹8, Fragrance: ₹4",
-    story: "The skincare industry's dirty secret: many ₹2,500 moisturizers and ₹200 moisturizers share nearly identical ingredient lists. The contract manufacturers (like Cosmax, Intercos) make products for dozens of brands at different price points. The jar and the label cost more than the formula difference.",
-    source: "Cosmetic formulation databases, contract manufacturer catalogs",
-    tags: ["skincare", "moisturizer", "cosmetics", "beauty"]
-  },
-  {
-    id: 20,
-    name: "Concert / Event Tickets",
-    brand: "Ticketing Platforms",
-    emoji: "🎫",
-    category: "services",
-    costPrice: 0,
-    retailPrice: 5000,
-    currency: "₹",
-    madeIn: "N/A — Service",
-    materials: "Service fees breakdown: Platform fee: ₹500, Processing: ₹150, Venue fee: ₹350, Artist cut: ₹2000",
-    story: "Ticketing platforms add ₹500-1500 in 'convenience fees' that provide no additional value. A ₹3000 ticket becomes ₹4500 after fees. The platforms have near-monopolies in many markets, so there's no competitive pressure to reduce fees. The artist often gets a smaller cut than the ticketing company.",
-    source: "Ticketing industry revenue breakdown, artist advocacy reports",
-    tags: ["tickets", "concert", "fees", "booking"]
-  }
+var PRODUCTS=[
+{id:1,name:"Designer Sunglasses",brand:"Premium Luxury Brands",emoji:"🕶️",category:"fashion",costPrice:500,retailPrice:25000,currency:"₹",madeIn:"Italy / China",materials:"Plastic/frame: ₹200, Lenses: ₹150, Packaging: ₹50, Labor: ₹100",story:"Most designer sunglasses are made by the same Italian company, Luxottica, which owns Ray-Ban, Oakley, and makes glasses for Chanel, Prada, Versace, and dozens more. The markup is almost entirely brand perception.",source:"Industry reports, Luxottica annual filings",tags:["luxury","sunglasses","eyewear","luxottica"]},
+{id:2,name:"Bottled Water (1L)",brand:"Major Bottled Brands",emoji:"💧",category:"food",costPrice:0.25,retailPrice:20,currency:"₹",madeIn:"Local bottling plants",materials:"Water: ₹0.05, Bottle: ₹0.10, Label: ₹0.05, Filtration: ₹0.05",story:"Bottled water costs roughly 2000x more than tap water for essentially the same product. In many cases, it is literally filtered municipal tap water sold in plastic.",source:"Consumer Reports, municipal water analysis",tags:["water","beverage","packaged","overpriced"]},
+{id:3,name:"Apple Lightning Cable",brand:"Apple (Official)",emoji:"🔌",category:"electronics",costPrice:150,retailPrice:1900,currency:"₹",madeIn:"China",materials:"Wire and connectors: ₹80, Chip: ₹30, Packaging: ₹20, Labor: ₹20",story:"Apple MFi certification adds significant cost. Third-party cables with identical internals cost a fraction. The cable uses standard USB components with an authentication chip.",source:"iFixit teardowns, component pricing",tags:["apple","cable","accessory","mfi"]},
+{id:4,name:"Movie Theatre Popcorn",brand:"Cinema Chains",emoji:"🍿",category:"food",costPrice:8,retailPrice:300,currency:"₹",madeIn:"In-house",materials:"Corn kernels: ₹3, Oil: ₹2, Butter/salt: ₹1, Bag: ₹2",story:"Movie theatres do not make money on tickets since most goes to studios. Popcorn and drinks are where the real profit is. A large popcorn has an estimated markup of 3000% plus.",source:"Theatre industry financial reports, Stanford research",tags:["popcorn","cinema","food","theatre"]},
+{id:5,name:"Designer Handbag",brand:"Top Luxury Fashion House",emoji:"👜",category:"fashion",costPrice:8000,retailPrice:300000,currency:"₹",madeIn:"Italy",materials:"Leather: ₹3000, Hardware: ₹1500, Labor: ₹2000, Packaging: ₹500, Overhead: ₹1000",story:"Luxury handbags are one of the highest-markup consumer products. You are paying for brand heritage, exclusivity perception, and the cost of maintaining boutiques in the world's most expensive locations.",source:"Luxury goods industry analysis, Bloomberg",tags:["luxury","handbag","leather","fashion"]},
+{id:6,name:"Printer Ink Cartridge",brand:"HP / Canon / Epson",emoji:"🖨️",category:"electronics",costPrice:200,retailPrice:2500,currency:"₹",madeIn:"China / Malaysia",materials:"Ink fluid: ₹50, Plastic cartridge: ₹80, Chip: ₹40, Packaging: ₹30",story:"Printer ink is famously one of the most expensive liquids on Earth, roughly 6 lakh rupees per liter when you do the math. Printer manufacturers sell printers at near-loss and make profits on ink.",source:"Which? Magazine, Consumer Reports, iFixit",tags:["printer","ink","cartridge","expensive"]},
+{id:7,name:"College Textbook",brand:"Major Academic Publishers",emoji:"📚",category:"education",costPrice:250,retailPrice:4500,currency:"₹",madeIn:"Various",materials:"Printing: ₹100, Paper: ₹80, Binding: ₹30, Author royalty: ₹40",story:"Academic publishers have a captive market since students MUST buy specific books. New editions are released frequently with minor changes to kill the used book market.",source:"US GAO report on textbook pricing",tags:["textbook","college","education","publishing"]},
+{id:8,name:"Brand Name Painkiller",brand:"Major Pharma vs Generic",emoji:"💊",category:"health",costPrice:3,retailPrice:45,currency:"₹",madeIn:"India / Various",materials:"Active ingredient: ₹1, Binders: ₹0.50, Coating: ₹0.50, Packaging: ₹1",story:"Generic and brand-name painkillers contain the EXACT same active ingredient in the EXACT same dosage. The difference is packaging, marketing, and brand trust.",source:"FDA guidelines, pharma industry reports",tags:["medicine","pharma","painkiller","generic"]},
+{id:9,name:"Hotel Mini-Bar Soda",brand:"Hotels Worldwide",emoji:"🏨",category:"services",costPrice:10,retailPrice:350,currency:"₹",madeIn:"Purchased wholesale",materials:"Soda can (wholesale): ₹10",story:"Hotels charge 30-50x the wholesale price for mini-bar items. The real product is convenience and the captive audience. Some hotels charge ₹800 for a ₹30 water bottle.",source:"Hotel industry pricing studies",tags:["hotel","minibar","travel","overpriced"]},
+{id:10,name:"Prescription Eyeglasses",brand:"Major Optical Chains",emoji:"👓",category:"fashion",costPrice:400,retailPrice:12000,currency:"₹",madeIn:"China / Local labs",materials:"Frame: ₹150, Lenses: ₹150, Coating: ₹50, Case: ₹30, Labor: ₹20",story:"The eyewear industry is dominated by EssilorLuxottica, which owns most major brands and retail chains. A pair that costs ₹400 to produce routinely sells for ₹10,000 to ₹30,000.",source:"60 Minutes investigation, EssilorLuxottica filings",tags:["glasses","eyewear","optical","prescription"]},
+{id:11,name:"Premium Lipstick",brand:"Premium Beauty Brands",emoji:"💄",category:"cosmetics",costPrice:35,retailPrice:1200,currency:"₹",madeIn:"Various (often same factories as drugstore)",materials:"Wax: ₹5, Pigments: ₹8, Oils: ₹5, Fragrance: ₹2, Tube: ₹10, Packaging: ₹5",story:"Many luxury and drugstore lipsticks are made in the SAME factories with VERY similar formulations. The ₹1200 lipstick might cost ₹35 to make while the ₹200 drugstore version costs ₹20.",source:"Cosmetic formulation analysis",tags:["lipstick","cosmetics","beauty","makeup"]},
+{id:12,name:"Gym Membership",brand:"Commercial Gym Chains",emoji:"🏋️",category:"services",costPrice:150,retailPrice:2500,currency:"₹",madeIn:"N/A - Service",materials:"Per-member: Equipment: ₹50, Electricity: ₹30, Staff: ₹40, Maintenance: ₹30",story:"Gyms survive on the fact that 67% of members never go. If everyone who signed up actually showed up, the gym would be overcrowded and unprofitable.",source:"Gym industry financial models",tags:["gym","fitness","membership","service"]},
+{id:13,name:"Branded Phone Case",brand:"Branded / Retail Store",emoji:"📱",category:"electronics",costPrice:25,retailPrice:999,currency:"₹",madeIn:"China",materials:"Silicone/TPU: ₹10, Mold: ₹5, Packaging: ₹5, Shipping: ₹5",story:"Phone cases from retail stores have insane markups. The same quality case costs ₹100-150 online. The retail markup exists because you just spent ₹80,000 on a phone.",source:"Alibaba/wholesale pricing",tags:["phone","case","accessory","smartphone"]},
+{id:14,name:"Wedding Dress",brand:"Bridal Boutiques",emoji:"👰",category:"fashion",costPrice:8000,retailPrice:80000,currency:"₹",madeIn:"China / India / Local",materials:"Fabric: ₹3000, Lace: ₹2000, Labor: ₹2000, Fitting: ₹1000",story:"The word wedding increases prices by 200-500%. The same quality dress without the bridal label would cost a fraction. The industry relies on emotional purchasing.",source:"Bridal industry reports",tags:["wedding","dress","bridal","fashion"]},
+{id:15,name:"Cafe Cappuccino",brand:"Major Coffee Chains",emoji:"☕",category:"food",costPrice:18,retailPrice:350,currency:"₹",madeIn:"In-store",materials:"Coffee beans: ₹8, Milk: ₹5, Cup/lid: ₹3, Sugar: ₹2",story:"A ₹350 cappuccino uses about ₹18 worth of ingredients. You are paying for the barista, the rent at a premium location, the ambiance, and the brand.",source:"Coffee industry cost breakdown",tags:["coffee","cafe","beverage","restaurant"]},
+{id:16,name:"Diamond Ring",brand:"Jewelry Brands",emoji:"💍",category:"fashion",costPrice:40000,retailPrice:200000,currency:"₹",madeIn:"India (Surat cutting) / Various",materials:"Rough diamond: ₹25000, Cutting: ₹8000, Gold setting: ₹5000, Certification: ₹2000",story:"Diamonds are not rare. De Beers controlled supply for decades to create artificial scarcity. The resale value is typically 20-40% of retail price.",source:"GIA reports, De Beers history",tags:["diamond","jewelry","ring","luxury"]},
+{id:17,name:"Brand Name Sneakers",brand:"Major Athletic Brands",emoji:"👟",category:"fashion",costPrice:1200,retailPrice:15000,currency:"₹",madeIn:"Vietnam / Indonesia / China",materials:"Upper: ₹300, Sole: ₹400, Insole: ₹100, Labor: ₹250, Packaging: ₹50, Shipping: ₹100",story:"A ₹15,000 sneaker typically costs ₹1,000-1,500 to manufacture. The factory worker earns roughly ₹500-800 per day. Marketing and endorsements make up a huge portion.",source:"Sneaker manufacturing cost analysis",tags:["sneakers","shoes","athletic","brand"]},
+{id:18,name:"Cable TV Subscription",brand:"Major TV Providers",emoji:"📺",category:"services",costPrice:80,retailPrice:600,currency:"₹",madeIn:"N/A - Service",materials:"Per-channel: ₹40, Infrastructure: ₹25, Customer service: ₹15",story:"Cable TV forces you to buy 200+ channels when you watch 5-10. You are paying ₹600 for content worth ₹80.",source:"Cable industry economics",tags:["cable","tv","subscription","service"]},
+{id:19,name:"Face Moisturizer",brand:"Premium Skincare Brands",emoji:"🧴",category:"cosmetics",costPrice:45,retailPrice:2500,currency:"₹",madeIn:"Various (same contract manufacturers)",materials:"Base: ₹10, Actives: ₹15, Emulsifiers: ₹5, Preservatives: ₹3, Jar: ₹8, Fragrance: ₹4",story:"Many ₹2,500 moisturizers and ₹200 moisturizers share nearly identical ingredient lists. The contract manufacturers make products for dozens of brands at different price points.",source:"Cosmetic formulation databases",tags:["skincare","moisturizer","cosmetics","beauty"]},
+{id:20,name:"Concert Event Tickets",brand:"Ticketing Platforms",emoji:"🎫",category:"services",costPrice:0,retailPrice:5000,currency:"₹",madeIn:"N/A - Service",materials:"Platform fee: ₹500, Processing: ₹150, Venue fee: ₹350, Artist cut: ₹2000",story:"Ticketing platforms add ₹500-1500 in convenience fees for no additional value. A ₹3000 ticket becomes ₹4500 after fees. The platforms have near-monopolies in many markets.",source:"Ticketing industry revenue breakdown",tags:["tickets","concert","fees","booking"]}
 ];
 
-// ============================================================
-// APP STATE
-// ============================================================
-let currentCategory = 'all';
-let quizState = { current: 0, score: 0, questions: [], answered: false };
+var currentCategory='all';
+var quizState={current:0,score:0,questions:[],answered:false};
+var searchTimer=null;
+var CATEGORIES=[
+  {key:'all',label:'All',emoji:'🔓'},
+  {key:'fashion',label:'Fashion',emoji:'👟'},
+  {key:'electronics',label:'Electronics',emoji:'📱'},
+  {key:'cosmetics',label:'Cosmetics',emoji:'💄'},
+  {key:'food',label:'Food & Drink',emoji:'🍔'},
+  {key:'health',label:'Health',emoji:'💊'},
+  {key:'services',label:'Services',emoji:'🏨'},
+  {key:'education',label:'Education',emoji:'📚'}
+];
 
-// ============================================================
-// UTILITY FUNCTIONS
-// ============================================================
-function formatPrice(amount, currency = '₹') {
-  if (amount >= 100000) {
-    return currency + (amount / 100000).toFixed(1).replace(/\.0$/, '') + 'L';
+/* Parse Notepad Data */
+function parseUserData(){
+  var el=document.getElementById('user-data');if(!el)return;
+  var text=el.textContent.trim();if(!text)return;
+  var lines=text.split('\n'),nextId=PRODUCTS.length>0?Math.max.apply(null,PRODUCTS.map(function(p){return p.id}))+1:1,added=0;
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i].trim();if(!line)continue;
+    if(line.toLowerCase().indexOf('product name')!==-1&&line.indexOf('|')!==-1)continue;
+    var c=line.split('|');if(c.length<11)continue;
+    var tagsRaw=c[11]?c[11].trim():'';
+    var tags=tagsRaw?tagsRaw.split(',').map(function(t){return t.trim().toLowerCase()}).filter(Boolean):[];
+    PRODUCTS.push({id:nextId++,name:c[0].trim(),brand:c[1].trim(),emoji:c[2].trim()||'📦',category:c[3].trim().toLowerCase(),costPrice:parseFloat(c[4])||0,retailPrice:parseFloat(c[5])||0,currency:c[6].trim()||'₹',madeIn:c[7].trim(),materials:c[8].trim(),story:c[9].trim(),source:c[10].trim(),tags:tags});
+    added++;
   }
-  if (amount >= 1000) {
-    return currency + amount.toLocaleString('en-IN');
+  if(added>0)console.log('FindDealVault: '+added+' products loaded. Total: '+PRODUCTS.length);
+}
+
+/* Utilities */
+function formatPrice(a,c){c=c||'₹';if(a>=100000)return c+(a/100000).toFixed(1).replace(/\.0$/,'')+'L';if(a>=1000)return c+a.toLocaleString('en-IN');if(a<1)return c+a.toFixed(2);return c+Math.round(a).toLocaleString('en-IN')}
+function getMarkup(c,r){if(c<=0)return 0;return Math.round(((r-c)/c)*100)}
+function getMarkupColor(m){if(m>=5000)return'#DC2626';if(m>=1000)return'#EF4444';if(m>=500)return'#F97316';if(m>=100)return'#EAB308';if(m>=50)return'#84CC16';return'#22C55E'}
+function getMarkupLabel(m){if(m>=5000)return'CRIMINAL';if(m>=1000)return'INSANE';if(m>=500)return'OUTRAGEOUS';if(m>=100)return'HIGH';if(m>=50)return'MODERATE';return'LOW'}
+function showToast(msg,type){type=type||'info';var c=document.getElementById('toastContainer'),t=document.createElement('div');var bg=type==='success'?'rgba(34,197,94,.15)':type==='error'?'rgba(239,68,68,.15)':'rgba(212,168,67,.15)';var bd=type==='success'?'rgba(34,197,94,.3)':type==='error'?'rgba(239,68,68,.3)':'rgba(212,168,67,.3)';var cl=type==='success'?'#22C55E':type==='error'?'#EF4444':'#D4A843';t.className='toast px-5 py-3 rounded-xl text-sm font-medium';t.style.cssText='background:'+bg+';border:1px solid '+bd+';color:'+cl+';backdrop-filter:blur(12px);min-width:250px';t.textContent=msg;c.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},3000)}
+function shareProduct(p){var m=getMarkup(p.costPrice,p.retailPrice);var txt=p.name+' costs only '+formatPrice(p.costPrice)+' to make but sells for '+formatPrice(p.retailPrice)+'! That is a '+m.toLocaleString()+'% markup. See more at findealvault.online';if(navigator.share){navigator.share({title:'Find Deal Vault',text:txt,url:window.location.href})}else{navigator.clipboard.writeText(txt).then(function(){showToast('Copied to clipboard!','success')})}}
+function findProduct(id){for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id)return PRODUCTS[i]}return null}
+
+/* Random Product */
+function openRandomProduct(){
+  if(PRODUCTS.length===0){showToast('No products in the vault yet','error');return}
+  var idx=Math.floor(Math.random()*PRODUCTS.length);
+  openModal(PRODUCTS[idx].id);
+}
+
+/* Smooth Nav */
+function smoothNav(e,id){if(e)e.preventDefault();var el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth'})}
+
+/* Category Chips */
+function renderCategoryChips(){
+  var container=document.getElementById('categoryChips');
+  var html='';
+  for(var i=0;i<CATEGORIES.length;i++){
+    var cat=CATEGORIES[i];
+    var count=cat.key==='all'?PRODUCTS.length:PRODUCTS.filter(function(p){return p.category===cat.key}).length;
+    if(cat.key!=='all'&&count===0)continue;
+    var isActive=currentCategory===cat.key;
+    var activeStyle=isActive?'background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.3);color:var(--gold)':'background:var(--vault-card);border-color:var(--vault-border);color:var(--text-dim)';
+    html+='<button onclick="setCategory(\''+cat.key+'\')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 hover:border-white/20" style="'+activeStyle+';border:1px solid '+(!isActive?'var(--vault-border)':'rgba(212,168,67,.3)')+'">'+cat.emoji+' '+cat.label+' <span style="opacity:.6">('+count+')</span></button>';
   }
-  if (amount < 1) {
-    return currency + amount.toFixed(2);
-  }
-  return currency + Math.round(amount).toLocaleString('en-IN');
+  container.innerHTML=html;
 }
 
-function getMarkup(cost, retail) {
-  return Math.round(((retail - cost) / cost) * 100);
-}
-
-function getMarkupColor(markup) {
-  if (markup >= 5000) return '#DC2626';
-  if (markup >= 1000) return '#EF4444';
-  if (markup >= 500) return '#F97316';
-  if (markup >= 100) return '#EAB308';
-  if (markup >= 50) return '#84CC16';
-  return '#22C55E';
-}
-
-function getMarkupLabel(markup) {
-  if (markup >= 5000) return 'CRIMINAL';
-  if (markup >= 1000) return 'INSANE';
-  if (markup >= 500) return 'OUTRAGEOUS';
-  if (markup >= 100) return 'HIGH';
-  if (markup >= 50) return 'MODERATE';
-  return 'LOW';
-}
-
-function showToast(message, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  const bgColor = type === 'success' ? 'rgba(34,197,94,0.15)' : type === 'error' ? 'rgba(239,68,68,0.15)' : 'rgba(212,168,67,0.15)';
-  const borderColor = type === 'success' ? 'rgba(34,197,94,0.3)' : type === 'error' ? 'rgba(239,68,68,0.3)' : 'rgba(212,168,67,0.3)';
-  const textColor = type === 'success' ? '#22C55E' : type === 'error' ? '#EF4444' : '#D4A843';
-  toast.className = 'toast px-5 py-3 rounded-xl text-sm font-medium';
-  toast.style.cssText = `background:${bgColor};border:1px solid ${borderColor};color:${textColor};backdrop-filter:blur(12px);min-width:250px;`;
-  toast.textContent = message;
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-}
-
-function shareProduct(product) {
-  const markup = getMarkup(product.costPrice, product.retailPrice);
-  const text = `💰 ${product.name} costs only ${formatPrice(product.costPrice)} to make but sells for ${formatPrice(product.retailPrice)}! That's a ${markup.toLocaleString()}% markup. 😱\n\nSee more at findealvault.online`;
-  if (navigator.share) {
-    navigator.share({ title: 'Find Deal Vault', text: text, url: window.location.href });
-  } else {
-    navigator.clipboard.writeText(text).then(() => {
-      showToast('Copied to clipboard! Share it everywhere.', 'success');
-    });
-  }
-}
-
-// ============================================================
-// RENDER PRODUCT CARDS
-// ============================================================
-function renderProducts(products) {
-  const grid = document.getElementById('productGrid');
-  const empty = document.getElementById('emptyState');
-  const count = document.getElementById('resultCount');
-
-  count.textContent = products.length;
-
-  if (products.length === 0) {
-    grid.innerHTML = '';
-    empty.classList.remove('hidden');
-    return;
-  }
-
+/* Render Cards */
+function renderProducts(products){
+  var grid=document.getElementById('productGrid'),empty=document.getElementById('emptyState');
+  document.getElementById('resultCount').textContent=products.length;
+  if(products.length===0){grid.innerHTML='';empty.classList.remove('hidden');lucide.createIcons();return}
   empty.classList.add('hidden');
-
-  grid.innerHTML = products.map((p, i) => {
-    const markup = getMarkup(p.costPrice, p.retailPrice);
-    const markupColor = getMarkupColor(markup);
-    const markupLabel = getMarkupLabel(markup);
-    const costWidth = Math.max(3, (p.costPrice / p.retailPrice) * 100);
-
-    return `
-      <div class="product-card-hidden card-hover rounded-2xl cursor-pointer overflow-hidden group"
-           style="background: var(--vault-card); border: 1px solid var(--vault-border); transition-delay: ${i * 50}ms;"
-           onclick="openModal(${p.id})"
-           data-index="${i}">
-        <div class="p-5 sm:p-6">
-          <!-- Header -->
-          <div class="flex items-start justify-between mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" style="background: rgba(255,255,255,0.03); border: 1px solid var(--vault-border);">
-                ${p.emoji}
-              </div>
-              <div class="min-w-0">
-                <h3 class="font-semibold text-sm sm:text-base truncate">${p.name}</h3>
-                <p class="text-xs truncate" style="color: var(--text-dim);">${p.brand}</p>
-              </div>
-            </div>
-            <div class="text-right shrink-0 ml-2">
-              <div class="text-xs font-mono font-bold" style="color: ${markupColor};">${markup.toLocaleString()}%</div>
-              <div class="text-[10px] font-medium tracking-wider" style="color: ${markupColor}; opacity: 0.7;">${markupLabel}</div>
-            </div>
-          </div>
-
-          <!-- Price Comparison -->
-          <div class="space-y-2.5 mb-4">
-            <div>
-              <div class="flex items-center justify-between text-xs mb-1">
-                <span style="color: var(--text-dim);">Cost to make</span>
-                <span class="font-mono font-medium text-green-500">${formatPrice(p.costPrice)}</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full overflow-hidden" style="background: rgba(255,255,255,0.04);">
-                <div class="h-full rounded-full markup-bar-cost bar-animate" style="width: ${costWidth}%;"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex items-center justify-between text-xs mb-1">
-                <span style="color: var(--text-dim);">You pay</span>
-                <span class="font-mono font-medium text-red-500">${formatPrice(p.retailPrice)}</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full overflow-hidden" style="background: rgba(255,255,255,0.04);">
-                <div class="h-full rounded-full markup-bar-retail bar-animate" style="width: 100%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Footer -->
-          <div class="flex items-center justify-between pt-3" style="border-top: 1px solid var(--vault-border);">
-            <span class="text-[10px] tracking-wider uppercase" style="color: var(--text-dim);">Made in ${p.madeIn}</span>
-            <div class="flex items-center gap-2">
-              <button onclick="event.stopPropagation();shareProduct(window._products.find(x=>x.id===${p.id}))"
-                      class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors hover:bg-white/5" style="color: var(--text-dim);" title="Share">
-                <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-              </button>
-              <i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5" style="color: var(--text-dim);"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  // Re-init Lucide icons for new DOM
-  lucide.createIcons();
-
-  // Store for share function
-  window._products = PRODUCTS;
-
-  // Animate cards in
-  requestAnimationFrame(() => {
-    const cards = grid.querySelectorAll('.product-card-hidden');
-    cards.forEach((card, i) => {
-      setTimeout(() => {
-        card.classList.remove('product-card-hidden');
-        card.classList.add('product-card-visible');
-      }, i * 80);
-    });
-  });
+  var h='';
+  for(var i=0;i<products.length;i++){
+    var p=products[i],mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu),ml=getMarkupLabel(mu),cw=Math.max(3,(p.costPrice/p.retailPrice)*100);
+    h+='<div class="product-card-hidden card-hover rounded-2xl cursor-pointer overflow-hidden group" style="background:var(--vault-card);border:1px solid var(--vault-border);transition-delay:'+(i*50)+'ms" onclick="openModal('+p.id+')"><div class="p-5 sm:p-6"><div class="flex items-start justify-between mb-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div class="min-w-0"><h3 class="font-semibold text-sm sm:text-base truncate">'+p.name+'</h3><p class="text-xs truncate" style="color:var(--text-dim)">'+p.brand+'</p></div></div><div class="text-right shrink-0 ml-2"><div class="text-xs font-mono font-bold" style="color:'+mc+'">'+mu.toLocaleString()+'%</div><div class="text-[10px] font-medium tracking-wider" style="color:'+mc+';opacity:.7">'+ml+'</div></div></div><div class="space-y-2.5 mb-4"><div><div class="flex items-center justify-between text-xs mb-1"><span style="color:var(--text-dim)">Cost to make</span><span class="font-mono font-medium text-green-500">'+formatPrice(p.costPrice)+'</span></div><div class="w-full h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,.04)"><div class="h-full rounded-full markup-bar-cost bar-animate" style="width:'+cw+'%"></div></div></div><div><div class="flex items-center justify-between text-xs mb-1"><span style="color:var(--text-dim)">You pay</span><span class="font-mono font-medium text-red-500">'+formatPrice(p.retailPrice)+'</span></div><div class="w-full h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,.04)"><div class="h-full rounded-full markup-bar-retail bar-animate" style="width:100%"></div></div></div></div><div class="flex items-center justify-between pt-3" style="border-top:1px solid var(--vault-border)"><span class="text-[10px] tracking-wider uppercase" style="color:var(--text-dim)">Made in '+p.madeIn+'</span><div class="flex items-center gap-2"><button onclick="event.stopPropagation();shareProduct(findProduct('+p.id+'))" class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors hover:bg-white/5" style="color:var(--text-dim)" title="Share"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button><i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5" style="color:var(--text-dim)"></i></div></div></div></div>';
+  }
+  grid.innerHTML=h;lucide.createIcons();
+  requestAnimationFrame(function(){var cards=grid.querySelectorAll('.product-card-hidden');for(var j=0;j<cards.length;j++){(function(card,d){setTimeout(function(){card.classList.remove('product-card-hidden');card.classList.add('product-card-visible')},d)})(cards[j],j*80)}});
 }
 
-// ============================================================
-// FILTER & SEARCH
-// ============================================================
-function filterProducts() {
-  const search = document.getElementById('searchInput').value.toLowerCase().trim();
-  const sort = document.getElementById('sortSelect').value;
-  const clearBtn = document.getElementById('clearSearch');
-
-  clearBtn.classList.toggle('hidden', !search);
-
-  let filtered = PRODUCTS.filter(p => {
-    const matchCategory = currentCategory === 'all' || p.category === currentCategory;
-    const matchSearch = !search ||
-      p.name.toLowerCase().includes(search) ||
-      p.brand.toLowerCase().includes(search) ||
-      p.category.toLowerCase().includes(search) ||
-      (p.tags && p.tags.some(t => t.toLowerCase().includes(search))) ||
-      p.madeIn.toLowerCase().includes(search);
-    return matchCategory && matchSearch;
+/* Filter & Search */
+function debounceSearch(){clearTimeout(searchTimer);searchTimer=setTimeout(filterProducts,200)}
+function filterProducts(){
+  var search=document.getElementById('searchInput').value.toLowerCase().trim();
+  var sort=document.getElementById('sortSelect').value;
+  document.getElementById('clearSearch').classList.toggle('hidden',!search);
+  var filtered=PRODUCTS.filter(function(p){
+    var mc=currentCategory==='all'||p.category===currentCategory;
+    var ms=!search||p.name.toLowerCase().indexOf(search)!==-1||p.brand.toLowerCase().indexOf(search)!==-1||p.category.toLowerCase().indexOf(search)!==-1||p.madeIn.toLowerCase().indexOf(search)!==-1||(p.tags&&p.tags.some(function(t){return t.indexOf(search)!==-1}));
+    return mc&&ms;
   });
-
-  // Sort
-  switch (sort) {
-    case 'markup-desc':
-      filtered.sort((a, b) => getMarkup(b.costPrice, b.retailPrice) - getMarkup(a.costPrice, a.retailPrice));
-      break;
-    case 'markup-asc':
-      filtered.sort((a, b) => getMarkup(a.costPrice, a.retailPrice) - getMarkup(b.costPrice, b.retailPrice));
-      break;
-    case 'name-asc':
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case 'name-desc':
-      filtered.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-    case 'price-desc':
-      filtered.sort((a, b) => b.retailPrice - a.retailPrice);
-      break;
-    case 'price-asc':
-      filtered.sort((a, b) => a.retailPrice - b.retailPrice);
-      break;
+  switch(sort){
+    case'markup-desc':filtered.sort(function(a,b){return getMarkup(b.costPrice,b.retailPrice)-getMarkup(a.costPrice,a.retailPrice)});break;
+    case'markup-asc':filtered.sort(function(a,b){return getMarkup(a.costPrice,a.retailPrice)-getMarkup(b.costPrice,b.retailPrice)});break;
+    case'name-asc':filtered.sort(function(a,b){return a.name.localeCompare(b.name)});break;
+    case'name-desc':filtered.sort(function(a,b){return b.name.localeCompare(a.name)});break;
+    case'price-desc':filtered.sort(function(a,b){return b.retailPrice-a.retailPrice});break;
+    case'price-asc':filtered.sort(function(a,b){return a.retailPrice-b.retailPrice});break;
   }
-
   renderProducts(filtered);
 }
-
-function setCategory(cat, btn) {
-  currentCategory = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.remove('active');
-    b.style.color = 'var(--text-secondary)';
-  });
-  btn.classList.add('active');
-  btn.style.color = 'var(--gold)';
+function setCategory(cat){
+  currentCategory=cat;
+  document.getElementById('categorySelect').value=cat;
+  renderCategoryChips();
   filterProducts();
 }
+function clearSearch(){document.getElementById('searchInput').value='';filterProducts();document.getElementById('searchInput').focus()}
 
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
+/* Modal */
+function openModal(id){
+  var p=findProduct(id);if(!p)return;
+  var mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu),ml=getMarkupLabel(mu),cw=Math.max(3,(p.costPrice/p.retailPrice)*100),ov=p.retailPrice-p.costPrice;
+  document.getElementById('modalContent').innerHTML='<div class="p-6 sm:p-8"><div class="flex items-center justify-between mb-6"><div class="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold" style="background:'+mc+'15;color:'+mc+';border:1px solid '+mc+'30">'+mu.toLocaleString()+'% MARKUP — '+ml+'</div><button onclick="closeModal()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-white/10" style="color:var(--text-dim)"><i data-lucide="x" class="w-5 h-5"></i></button></div><div class="flex items-center gap-4 mb-8"><div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div><h2 class="text-xl sm:text-2xl font-bold">'+p.name+'</h2><p class="text-sm" style="color:var(--text-dim)">'+p.brand+'</p></div></div><div class="rounded-2xl p-5 sm:p-6 mb-6" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><div class="grid grid-cols-2 gap-6 mb-5"><div><div class="text-xs uppercase tracking-wider mb-1" style="color:var(--text-dim)">Cost to Make</div><div class="text-2xl sm:text-3xl font-bold font-mono text-green-500">'+formatPrice(p.costPrice)+'</div></div><div class="text-right"><div class="text-xs uppercase tracking-wider mb-1" style="color:var(--text-dim)">You Pay</div><div class="text-2xl sm:text-3xl font-bold font-mono text-red-500">'+formatPrice(p.retailPrice)+'</div></div></div><div class="relative"><div class="w-full h-4 rounded-full overflow-hidden" style="background:rgba(255,255,255,.04)"><div class="h-full rounded-full markup-bar-cost" style="width:'+cw+'%;float:left"></div><div class="h-full rounded-r-full markup-bar-retail" style="width:'+(100-cw)+'%;float:left"></div></div><div class="flex justify-between mt-2"><span class="text-[10px] font-mono" style="color:var(--text-dim)">'+cw.toFixed(1)+'%</span><span class="text-[10px] font-mono" style="color:var(--text-dim)">100%</span></div></div><div class="mt-4 text-center py-3 rounded-xl" style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.1)"><span class="text-sm" style="color:var(--text-dim)">You overpay by</span><span class="text-lg font-bold font-mono text-red-500 ml-2">'+formatPrice(ov)+'</span></div></div><div class="mb-6"><h3 class="text-sm font-semibold uppercase tracking-wider mb-3" style="color:var(--gold)">Cost Breakdown</h3><div class="rounded-xl p-4" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><p class="text-sm leading-relaxed" style="color:var(--text-secondary)">'+p.materials+'</p></div></div><div class="mb-6"><h3 class="text-sm font-semibold uppercase tracking-wider mb-3" style="color:var(--gold)">The Full Story</h3><p class="text-sm leading-relaxed" style="color:var(--text-secondary)">'+p.story+'</p></div><div class="grid grid-cols-2 gap-3 mb-6"><div class="rounded-xl p-3" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><div class="text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-dim)">Made In</div><div class="text-sm font-medium">'+p.madeIn+'</div></div><div class="rounded-xl p-3" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><div class="text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-dim)">Category</div><div class="text-sm font-medium capitalize">'+p.category+'</div></div></div><div class="mb-6"><div class="text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-dim)">Sources</div><p class="text-xs" style="color:var(--text-dim)">'+p.source+'</p></div><div class="flex gap-3"><button onclick="shareProduct(findProduct('+p.id+'));closeModal()" class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));color:black"><i data-lucide="share-2" class="w-4 h-4"></i>Share This Robbery</button><button onclick="closeModal()" class="px-5 py-3.5 rounded-xl text-sm font-medium transition-colors hover:bg-white/5" style="border:1px solid var(--vault-border);color:var(--text-secondary)">Close</button></div></div>';
+  document.getElementById('productModal').classList.remove('hidden');document.body.style.overflow='hidden';lucide.createIcons();
+}
+function closeModal(){document.getElementById('productModal').classList.add('hidden');document.body.style.overflow=''}
+
+/* Leaderboard */
+function renderLeaderboard(){
+  var sorted=PRODUCTS.slice().sort(function(a,b){return getMarkup(b.costPrice,b.retailPrice)-getMarkup(a.costPrice,a.retailPrice)}),top=sorted.slice(0,10);
+  var medals=['🥇','🥈','🥉'],mColors=['#D4A843','#A0A0B0','#CD7F32'],h='';
+  for(var i=0;i<top.length;i++){
+    var p=top[i],mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu);
+    var rc=i<3?mColors[i]:'var(--text-dim)',rbg=i<3?rc+'15':'transparent',rbd=i<3?rc+'30':'var(--vault-border)',rank=i<3?medals[i]:'#'+(i+1);
+    h+='<div class="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01]" style="background:var(--vault-card);border:1px solid var(--vault-border)" onclick="openModal('+p.id+')"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base font-bold shrink-0" style="background:'+rbg+';border:1px solid '+rbd+';color:'+rc+'">'+rank+'</div><div class="text-xl sm:text-2xl shrink-0">'+p.emoji+'</div><div class="flex-1 min-w-0"><div class="font-semibold text-sm sm:text-base truncate">'+p.name+'</div><div class="text-xs truncate" style="color:var(--text-dim)">'+formatPrice(p.costPrice)+' → '+formatPrice(p.retailPrice)+'</div></div><div class="text-right shrink-0"><div class="text-sm sm:text-base font-mono font-bold" style="color:'+mc+'">'+mu.toLocaleString()+'%</div></div><i data-lucide="chevron-right" class="w-4 h-4 shrink-0 hidden sm:block" style="color:var(--text-dim)"></i></div>';
+  }
+  document.getElementById('leaderboardList').innerHTML=h;lucide.createIcons();
+}
+
+/* Quiz */
+function generateQuizQuestions(){var s=PRODUCTS.slice().sort(function(){return Math.random()-.5}).slice(0,10);return s.map(function(p){var c=p.costPrice,mu=getMarkup(p.costPrice,p.retailPrice),o=[c];var ms=[.3,.5,2,3,5,8,.1,.7,1.5,4].sort(function(){return Math.random()-.5});for(var i=0;i<ms.length&&o.length<4;i++){var w=Math.round(c*ms[i]);if(w>0&&w!==c&&o.indexOf(w)===-1)o.push(w)}while(o.length<4){var w=Math.round(c*(1+Math.random()*5));if(w>0&&o.indexOf(w)===-1)o.push(w)}o=o.slice(0,4).sort(function(){return Math.random()-.5});return{product:p,correctAnswer:c,options:o,markup:mu}})}
+function startQuiz(){if(PRODUCTS.length<4){showToast('Need at least 4 products for the quiz','error');return}quizState={current:0,score:0,questions:generateQuizQuestions(),answered:false};document.getElementById('quizStart').classList.add('hidden');document.getElementById('quizResult').classList.add('hidden');document.getElementById('quizActive').classList.remove('hidden');renderQuizQuestion()}
+function renderQuizQuestion(){var q=quizState.questions[quizState.current],p=q.product;quizState.answered=false;document.getElementById('quizCurrent').textContent=quizState.current+1;document.getElementById('quizScore').textContent=quizState.score;document.getElementById('quizProgress').style.width=((quizState.current+1)/quizState.questions.length*100)+'%';document.getElementById('quizEmoji').textContent=p.emoji;document.getElementById('quizProductName').textContent=p.name;document.getElementById('quizBrand').textContent=p.brand;document.getElementById('quizRetailPrice').textContent=formatPrice(p.retailPrice);document.getElementById('quizFeedback').classList.add('hidden');document.getElementById('quizNextBtn').classList.add('hidden');var oh='';for(var i=0;i<q.options.length;i++){oh+='<button class="quiz-option rounded-xl p-4 text-center" style="border:1px solid var(--vault-border)" onclick="answerQuiz('+i+','+q.options[i]+','+q.correctAnswer+')" id="quizOpt'+i+'"><span class="text-lg sm:text-xl font-bold font-mono">'+formatPrice(q.options[i])+'</span></button>'}document.getElementById('quizOptions').innerHTML=oh}
+function answerQuiz(index,selected,correct){if(quizState.answered)return;quizState.answered=true;var isCorrect=selected===correct,q=quizState.questions[quizState.current];for(var i=0;i<q.options.length;i++){var el=document.getElementById('quizOpt'+i);el.style.pointerEvents='none';if(q.options[i]===correct)el.classList.add('correct');if(q.options[i]===selected&&!isCorrect)el.classList.add('wrong')}if(isCorrect){quizState.score++;document.getElementById('quizScore').textContent=quizState.score}var fb=document.getElementById('quizFeedback'),ft=document.getElementById('quizFeedbackText'),fc=document.getElementById('quizFactText');fb.classList.remove('hidden');if(isCorrect){fb.style.borderColor='rgba(34,197,94,.3)';fb.style.background='rgba(34,197,94,.05)';ft.style.color='#22C55E';ft.textContent='Correct! You know your stuff.'}else{fb.style.borderColor='rgba(239,68,68,.3)';fb.style.background='rgba(239,68,68,.05)';ft.style.color='#EF4444';ft.textContent='Wrong! Actual cost is '+formatPrice(correct)+' — that is a '+q.markup.toLocaleString()+'% markup.'}fc.textContent=q.product.story.length>150?q.product.story.substring(0,150)+'...':q.product.story;var nb=document.getElementById('quizNextBtn');nb.classList.remove('hidden');nb.textContent=quizState.current<quizState.questions.length-1?'Next Question →':'See Results →'}
+function nextQuizQuestion(){quizState.current++;if(quizState.current>=quizState.questions.length){showQuizResult()}else{renderQuizQuestion()}}
+function showQuizResult(){document.getElementById('quizActive').classList.add('hidden');document.getElementById('quizResult').classList.remove('hidden');var s=quizState.score,t=quizState.questions.length,r=s/t;document.getElementById('quizFinalScore').textContent=s+'/'+t;var ti=document.getElementById('quizResultTitle'),mg=document.getElementById('quizResultMessage'),ic=document.getElementById('quizResultIcon');if(r>=.9){ti.textContent='Unbelievable!';mg.textContent='You see through the BS better than anyone.';ic.style.borderColor='#22C55E';ic.style.background='rgba(34,197,94,.1)'}else if(r>=.7){ti.textContent='Impressive!';mg.textContent='You know more than most about real costs.'}else if(r>=.5){ti.textContent='Eye-Opening?';mg.textContent='Half right — brands hide the truth well.';ic.style.borderColor='#F97316';ic.style.background='rgba(249,115,22,.1)'}else if(r>=.3){ti.textContent='Shocked?';mg.textContent='The markup reality is wild.';ic.style.borderColor='#EF4444';ic.style.background='rgba(239,68,68,.1)'}else{ti.textContent='Mind Blown';mg.textContent='You have been overpaying more than you thought.';ic.style.borderColor='#EF4444';ic.style.background='rgba(239,68,68,.1)'}lucide.createIcons()}
+
+/* Counter Animation */
+function animateCounter(el,target,suffix,duration){suffix=suffix||'';duration=duration||2000;var st=performance.now();function upd(now){var pr=Math.min((now-st)/duration,1),e=1-Math.pow(1-pr,4),cur=Math.round(target*e);el.textContent=(target>=1000?cur.toLocaleString():cur)+suffix;if(pr<1)requestAnimationFrame(upd)}requestAnimationFrame(upd)}
+
+/* Nav Helpers */
+function closeMobile(){document.getElementById('mobileMenu').classList.add('hidden')}
+
+/* Active Nav Highlighting on Scroll */
+function updateActiveNav(){
+  var sections=['vault','leaderboard','quiz','about'];
+  var scrollPos=window.scrollY+200;
+  var links=document.querySelectorAll('.nav-link');
+  for(var i=sections.length-1;i>=0;i--){
+    var sec=document.getElementById(sections[i]);
+    if(sec&&sec.offsetTop<=scrollPos){
+      links.forEach(function(l){l.classList.remove('active')});
+      var activeLink=document.querySelector('.nav-link[href="#'+sections[i]+'"]');
+      if(activeLink)activeLink.classList.add('active');
+      break;
+    }
+  }
+}
+
+/* Back to Top Visibility */
+function updateBackToTop(){document.getElementById('backToTop').classList.toggle('visible',window.scrollY>600)}
+
+/* Scroll Event (combined for performance) */
+var scrollTick=false;
+window.addEventListener('scroll',function(){
+  if(!scrollTick){scrollTick=true;requestAnimationFrame(function(){
+    document.getElementById('navbar').style.borderBottomColor=window.scrollY>100?'var(--vault-border)':'transparent';
+    updateActiveNav();
+    updateBackToTop();
+    scrollTick=false;
+  })}
+});
+
+document.getElementById('mobileMenuBtn').addEventListener('click',function(){document.getElementById('mobileMenu').classList.toggle('hidden')});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
+
+/* INIT */
+window.addEventListener('load',function(){
+  parseUserData();
+  renderCategoryChips();
   filterProducts();
-  document.getElementById('searchInput').focus();
-}
-
-// ============================================================
-// PRODUCT DETAIL MODAL
-// ============================================================
-function openModal(id) {
-  const p = PRODUCTS.find(x => x.id === id);
-  if (!p) return;
-
-  const markup = getMarkup(p.costPrice, p.retailPrice);
-  const markupColor = getMarkupColor(markup);
-  const markupLabel = getMarkupLabel(markup);
-  const costWidth = Math.max(3, (p.costPrice / p.retailPrice) * 100);
-  const overpayAmount = p.retailPrice - p.costPrice;
-
-  document.getElementById('modalContent').innerHTML = `
-    <div class="p-6 sm:p-8">
-      <!-- Close -->
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold" style="background: ${markupColor}15; color: ${markupColor}; border: 1px solid ${markupColor}30;">
-          ${markup.toLocaleString()}% MARKUP — ${markupLabel}
-        </div>
-        <button onclick="closeModal()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-white/10" style="color: var(--text-dim);">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Product Header -->
-      <div class="flex items-center gap-4 mb-8">
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0" style="background: rgba(255,255,255,0.03); border: 1px solid var(--vault-border);">
-          ${p.emoji}
-        </div>
-        <div>
-          <h2 class="text-xl sm:text-2xl font-bold">${p.name}</h2>
-          <p class="text-sm" style="color: var(--text-dim);">${p.brand}</p>
-        </div>
-      </div>
-
-      <!-- Big Price Comparison -->
-      <div class="rounded-2xl p-5 sm:p-6 mb-6" style="background: rgba(255,255,255,0.02); border: 1px solid var(--vault-border);">
-        <div class="grid grid-cols-2 gap-6 mb-5">
-          <div>
-            <div class="text-xs uppercase tracking-wider mb-1" style="color: var(--text-dim);">Cost to Make</div>
-            <div class="text-2xl sm:text-3xl font-bold font-mono text-green-500">${formatPrice(p.costPrice)}</div>
-          </div>
-          <div class="text-right">
-            <div class="text-xs uppercase tracking-wider mb-1" style="color: var(--text-dim);">You Pay</div>
-            <div class="text-2xl sm:text-3xl font-bold font-mono text-red-500">${formatPrice(p.retailPrice)}</div>
-          </div>
-        </div>
-        <!-- Visual bar -->
-        <div class="relative">
-          <div class="w-full h-4 rounded-full overflow-hidden" style="background: rgba(255,255,255,0.04);">
-            <div class="h-full rounded-full markup-bar-cost" style="width: ${costWidth}%; float: left;"></div>
-            <div class="h-full rounded-r-full markup-bar-retail" style="width: ${100 - costWidth}%; float: left;"></div>
-          </div>
-          <div class="flex justify-between mt-2">
-            <span class="text-[10px] font-mono" style="color: var(--text-dim);">${costWidth.toFixed(1)}%</span>
-            <span class="text-[10px] font-mono" style="color: var(--text-dim);">100%</span>
-          </div>
-        </div>
-        <div class="mt-4 text-center py-3 rounded-xl" style="background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.1);">
-          <span class="text-sm" style="color: var(--text-dim);">You overpay by</span>
-          <span class="text-lg font-bold font-mono text-red-500 ml-2">${formatPrice(overpayAmount)}</span>
-        </div>
-      </div>
-
-      <!-- Breakdown -->
-      <div class="mb-6">
-        <h3 class="text-sm font-semibold uppercase tracking-wider mb-3" style="color: var(--gold);">Cost Breakdown</h3>
-        <div class="rounded-xl p-4" style="background: rgba(255,255,255,0.02); border: 1px solid var(--vault-border);">
-          <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">${p.materials}</p>
-        </div>
-      </div>
-
-      <!-- Story -->
-      <div class="mb-6">
-        <h3 class="text-sm font-semibold uppercase tracking-wider mb-3" style="color: var(--gold);">The Full Story</h3>
-        <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">${p.story}</p>
-      </div>
-
-      <!-- Meta -->
-      <div class="grid grid-cols-2 gap-3 mb-6">
-        <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--vault-border);">
-          <div class="text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-dim);">Made In</div>
-          <div class="text-sm font-medium">${p.madeIn}</div>
-        </div>
-        <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--vault-border);">
-          <div class="text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-dim);">Category</div>
-          <div class="text-sm font-medium capitalize">${p.category}</div>
-        </div>
-      </div>
-
-      <!-- Source -->
-      <div class="mb-6">
-        <div class="text-[10px] uppercase tracking-wider mb-1" style="color: var(--text-dim);">Sources</div>
-        <p class="text-xs" style="color: var(--text-dim);">${p.source}</p>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex gap-3">
-        <button onclick="shareProduct(window._products.find(x=>x.id===${p.id}));closeModal()"
-                class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90"
-                style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); color: black;">
-          <i data-lucide="share-2" class="w-4 h-4"></i>
-          Share This Robbery
-        </button>
-        <button onclick="closeModal()"
-                class="px-5 py-3.5 rounded-xl text-sm font-medium transition-colors hover:bg-white/5"
-                style="border: 1px solid var(--vault-border); color: var(--text-secondary);">
-          Close
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('productModal').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  lucide.createIcons();
-}
-
-function closeModal() {
-  document.getElementById('productModal').classList.add('hidden');
-  document.body.style.overflow = '';
-}
-
-// ============================================================
-// LEADERBOARD
-// ============================================================
-function renderLeaderboard() {
-  const sorted = [...PRODUCTS].sort((a, b) => getMarkup(b.costPrice, b.retailPrice) - getMarkup(a.costPrice, a.retailPrice));
-  const top10 = sorted.slice(0, 10);
-
-  document.getElementById('leaderboardList').innerHTML = top10.map((p, i) => {
-    const markup = getMarkup(p.costPrice, p.retailPrice);
-    const markupColor = getMarkupColor(markup);
-    const rankColors = ['#D4A843', '#A0A0B0', '#CD7F32'];
-    const rankColor = i < 3 ? rankColors[i] : 'var(--text-dim)';
-    const rankBg = i < 3 ? `${rankColor}15` : 'transparent';
-    const rankBorder = i < 3 ? `${rankColor}30` : 'var(--vault-border)';
-
-    return `
-      <div class="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01]"
-           style="background: var(--vault-card); border: 1px solid var(--vault-border);"
-           onclick="openModal(${p.id})">
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base font-bold shrink-0"
-             style="background: ${rankBg}; border: 1px solid ${rankBorder}; color: ${rankColor};">
-          ${i < 3 ? ['🥇','🥈','🥉'][i] : '#' + (i+1)}
-        </div>
-        <div class="text-xl sm:text-2xl shrink-0">${p.emoji}</div>
-        <div class="flex-1 min-w-0">
-          <div class="font-semibold text-sm sm:text-base truncate">${p.name}</div>
-          <div class="text-xs truncate" style="color: var(--text-dim);">${formatPrice(p.costPrice)} → ${formatPrice(p.retailPrice)}</div>
-        </div>
-        <div class="text-right shrink-0">
-          <div class="text-sm sm:text-base font-mono font-bold" style="color: ${markupColor};">${markup.toLocaleString()}%</div>
-        </div>
-        <i data-lucide="chevron-right" class="w-4 h-4 shrink-0 hidden sm:block" style="color: var(--text-dim);"></i>
-      </div>
-    `;
-  }).join('');
-
-  lucide.createIcons();
-}
-
-// ============================================================
-// QUIZ
-// ============================================================
-function generateQuizQuestions() {
-  const shuffled = [...PRODUCTS].sort(() => Math.random() - 0.5).slice(0, 10);
-  return shuffled.map(p => {
-    const correct = p.costPrice;
-    const markup = getMarkup(p.costPrice, p.retailPrice);
-
-    // Generate wrong options
-    let options = [correct];
-    const multipliers = [0.3, 0.5, 2, 3, 5, 8, 0.1, 0.7, 1.5, 4];
-    const shuffledMultipliers = multipliers.sort(() => Math.random() - 0.5);
-
-    for (let m of shuffledMultipliers) {
-      if (options.length >= 4) break;
-      let wrong = Math.round(correct * m);
-      if (wrong > 0 && wrong !== correct && !options.includes(wrong)) {
-        options.push(wrong);
-      }
-    }
-
-    // Ensure exactly 4 options
-    while (options.length < 4) {
-      let wrong = Math.round(correct * (1 + (Math.random() * 5)));
-      if (wrong > 0 && !options.includes(wrong)) options.push(wrong);
-    }
-
-    options = options.slice(0, 4).sort(() => Math.random() - 0.5);
-
-    return {
-      product: p,
-      correctAnswer: correct,
-      options: options,
-      markup: markup
-    };
-  });
-}
-
-function startQuiz() {
-  quizState = { current: 0, score: 0, questions: generateQuizQuestions(), answered: false };
-  document.getElementById('quizStart').classList.add('hidden');
-  document.getElementById('quizResult').classList.add('hidden');
-  document.getElementById('quizActive').classList.remove('hidden');
-  renderQuizQuestion();
-}
-
-function renderQuizQuestion() {
-  const q = quizState.questions[quizState.current];
-  const p = q.product;
-  quizState.answered = false;
-
-  document.getElementById('quizCurrent').textContent = quizState.current + 1;
-  document.getElementById('quizScore').textContent = quizState.score;
-  document.getElementById('quizProgress').style.width = ((quizState.current + 1) / 10 * 100) + '%';
-  document.getElementById('quizEmoji').textContent = p.emoji;
-  document.getElementById('quizProductName').textContent = p.name;
-  document.getElementById('quizBrand').textContent = p.brand;
-  document.getElementById('quizRetailPrice').textContent = formatPrice(p.retailPrice);
-  document.getElementById('quizFeedback').classList.add('hidden');
-  document.getElementById('quizNextBtn').classList.add('hidden');
-
-  document.getElementById('quizOptions').innerHTML = q.options.map((opt, i) => `
-    <button class="quiz-option rounded-xl p-4 text-center" style="border: 1px solid var(--vault-border);"
-            onclick="answerQuiz(${i}, ${opt}, ${q.correctAnswer})" id="quizOpt${i}">
-      <span class="text-lg sm:text-xl font-bold font-mono">${formatPrice(opt)}</span>
-    </button>
-  `).join('');
-}
-
-function answerQuiz(index, selected, correct) {
-  if (quizState.answered) return;
-  quizState.answered = true;
-
-  const isCorrect = selected === correct;
-  const q = quizState.questions[quizState.current];
-
-  // Highlight options
-  q.options.forEach((opt, i) => {
-    const el = document.getElementById(`quizOpt${i}`);
-    el.style.pointerEvents = 'none';
-    if (opt === correct) el.classList.add('correct');
-    if (opt === selected && !isCorrect) el.classList.add('wrong');
-  });
-
-  if (isCorrect) {
-    quizState.score++;
-    document.getElementById('quizScore').textContent = quizState.score;
-  }
-
-  // Show feedback
-  const feedback = document.getElementById('quizFeedback');
-  const feedbackText = document.getElementById('quizFeedbackText');
-  const factText = document.getElementById('quizFactText');
-
-  feedback.classList.remove('hidden');
-
-  if (isCorrect) {
-    feedback.style.borderColor = 'rgba(34,197,94,0.3)';
-    feedback.style.background = 'rgba(34,197,94,0.05)';
-    feedbackText.style.color = '#22C55E';
-    feedbackText.textContent = '✅ Correct! You know your stuff.';
-  } else {
-    feedback.style.borderColor = 'rgba(239,68,68,0.3)';
-    feedback.style.background = 'rgba(239,68,68,0.05)';
-    feedbackText.style.color = '#EF4444';
-    feedbackText.textContent = `❌ Wrong! The actual cost is ${formatPrice(correct)} — that's a ${q.markup.toLocaleString()}% markup.`;
-  }
-
-  factText.textContent = q.product.story.substring(0, 150) + '...';
-
-  document.getElementById('quizNextBtn').classList.remove('hidden');
-  document.getElementById('quizNextBtn').textContent = quizState.current < 9 ? 'Next Question →' : 'See Results →';
-}
-
-function nextQuizQuestion() {
-  quizState.current++;
-  if (quizState.current >= 10) {
-    showQuizResult();
-  } else {
-    renderQuizQuestion();
-  }
-}
-
-function showQuizResult() {
-  document.getElementById('quizActive').classList.add('hidden');
-  document.getElementById('quizResult').classList.remove('hidden');
-
-  const score = quizState.score;
-  document.getElementById('quizFinalScore').textContent = `${score}/10`;
-
-  const title = document.getElementById('quizResultTitle');
-  const msg = document.getElementById('quizResultMessage');
-  const icon = document.getElementById('quizResultIcon');
-
-  if (score >= 9) {
-    title.textContent = '🧠 Unbelievable!';
-    msg.textContent = 'You see through the BS better than anyone. The vault has no secrets from you.';
-    icon.style.borderColor = '#22C55E';
-    icon.style.background = 'rgba(34,197,94,0.1)';
-  } else if (score >= 7) {
-    title.textContent = '🔥 Impressive!';
-    msg.textContent = 'You know more than most people about real costs. Share this knowledge.';
-    icon.style.borderColor = 'var(--gold)';
-    icon.style.background = 'rgba(212,168,67,0.1)';
-  } else if (score >= 5) {
-    title.textContent = '😬 Eye-Opening?';
-    msg.textContent = 'Half right — but the other half shows how well brands hide the truth from us all.';
-    icon.style.borderColor = '#F97316';
-    icon.style.background = 'rgba(249,115,22,0.1)';
-  } else if (score >= 3) {
-    title.textContent = '😱 Shocked?';
-    msg.textContent = 'The markup reality is wild. Now you know why this vault exists.';
-    icon.style.borderColor = '#EF4444';
-    icon.style.background = 'rgba(239,68,68,0.1)';
-  } else {
-    title.textContent = '🤯 Mind Blown';
-    msg.textContent = 'You\'ve been overpaying more than you thought. Time to explore the vault.';
-    icon.style.borderColor = '#EF4444';
-    icon.style.background = 'rgba(239,68,68,0.1)';
-  }
-
-  lucide.createIcons();
-}
-
-// ============================================================
-// ANIMATED COUNTERS
-// ============================================================
-function animateCounter(el, target, suffix = '', duration = 2000) {
-  const start = 0;
-  const startTime = performance.now();
-
-  function update(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 4);
-    const current = Math.round(start + (target - start) * eased);
-
-    if (target >= 1000) {
-      el.textContent = current.toLocaleString() + suffix;
-    } else {
-      el.textContent = current + suffix;
-    }
-
-    if (progress < 1) requestAnimationFrame(update);
-  }
-
-  requestAnimationFrame(update);
-}
-
-// ============================================================
-// SCROLL & NAV
-// ============================================================
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
-
-function closeMobileMenu() {
-  document.getElementById('mobileMenu').classList.add('hidden');
-}
-
-// Navbar scroll effect
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-  const navbar = document.getElementById('navbar');
-  const scrollY = window.scrollY;
-
-  if (scrollY > 100) {
-    navbar.style.borderBottomColor = 'var(--vault-border)';
-  } else {
-    navbar.style.borderBottomColor = 'transparent';
-  }
-
-  lastScroll = scrollY;
-});
-
-// Mobile menu toggle
-document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.toggle('hidden');
-});
-
-// Close modal on Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
-});
-
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-  // Init Lucide
-  lucide.createIcons();
-
-  // Render products
-  filterProducts();
-
-  // Render leaderboard
   renderLeaderboard();
-
-  // Animate hero stats
-  setTimeout(() => {
-    const totalProducts = PRODUCTS.length;
-    const avgMarkup = Math.round(PRODUCTS.reduce((acc, p) => acc + getMarkup(p.costPrice, p.retailPrice), 0) / totalProducts);
-    const totalSaved = PRODUCTS.reduce((acc, p) => acc + (p.retailPrice - p.costPrice), 0);
-
-    animateCounter(document.getElementById('statProducts'), totalProducts, '+');
-    animateCounter(document.getElementById('statMarkup'), avgMarkup, '%');
-    animateCounter(document.getElementById('statSaved'), Math.round(totalSaved / 1000), 'K+');
-  }, 800);
-
-  // Intersection Observer for scroll animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-fade-up');
-        entry.target.style.opacity = '1';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('#leaderboard > div > div, #about .grid > div').forEach(el => {
-    el.style.opacity = '0';
-    observer.observe(el);
-  });
+  setTimeout(function(){
+    var total=PRODUCTS.length;
+    var avg=total>0?Math.round(PRODUCTS.reduce(function(a,p){return a+getMarkup(p.costPrice,p.retailPrice)},0)/total):0;
+    var saved=PRODUCTS.reduce(function(a,p){return a+(p.retailPrice-p.costPrice)},0);
+    animateCounter(document.getElementById('statProducts'),total,'+');
+    animateCounter(document.getElementById('statMarkup'),avg,'%');
+    animateCounter(document.getElementById('statSaved'),Math.round(saved/1000),'K+');
+  },800);
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.classList.add('animate-fade-up')}})},{threshold:.1});
+  var targets=document.querySelectorAll('#leaderboard > div > div, #about .grid > div');
+  for(var i=0;i<targets.length;i++){targets[i].style.opacity='0';obs.observe(targets[i])}
+  lucide.createIcons();
 });
 </script>
+
+<!-- ================================================================
+     PASTE YOUR NOTEPAD DATA BELOW THIS LINE
+     ================================================================
+     FORMAT: Product Name|Brand|Emoji|Category|CostPrice|RetailPrice|Currency|Made In|Materials|Story|Source|Tags
+
+     CATEGORIES: fashion, electronics, cosmetics, food, health, services, education
+     CURRENCY: ₹ or $ or €
+     TAGS: comma separated, lowercase
+     NOTE: Do NOT use | inside any field.
+
+     EXAMPLES (delete these before adding real data):
+
+     iPhone 16 Pro Max|Apple|📱|electronics|45000|159900|₹|China/India|A17 Pro chip: ₹12000, Display: ₹8000, Camera: ₹6000, Battery: ₹1500, Other: ₹17500|Apple BOM estimate based on iFixit teardown analysis|iFixit, TechInsights|iphone,apple,smartphone
+     Levi's 501 Jeans|Levi's|👖|fashion|600|5499|₹|Vietnam|Denim: ₹250, Buttons: ₹80, Labor: ₹150, Finishing: ₹80, Packaging: ₹40|Same quality from unbranded maker costs a fraction|Alibaba wholesale|jeans,fashion,denim,levis
+     Red Bull 250ml|Red Bull|🥫|food|8|125|₹|India|Water: ₹0.5, Caffeine: ₹2, Sugar: ₹1, Can: ₹3, Carbonation: ₹0.5|Most money goes to extreme sports marketing|Beverage industry|redbull,beverage,energy
+
+     ================================================================ -->
+<div id="user-data" style="display:none;">
+
+</div>
 </body>
 </html>
