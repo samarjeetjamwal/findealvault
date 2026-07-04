@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -23,12 +23,12 @@
   @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   @keyframes barGrow{from{width:0%}}
-  @keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,0.3)}50%{box-shadow:0 0 30px 5px rgba(212,168,67,0.15)}}
+  @keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,.3)}50%{box-shadow:0 0 30px 5px rgba(212,168,67,.15)}}
   @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
   @keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
   @keyframes scaleIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
   @keyframes fadeOut{to{opacity:0;transform:translateY(-10px);pointer-events:none}}
-  @keyframes bounceIn{0%{transform:scale(0)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+  @keyframes gradeReveal{0%{opacity:0;transform:scale(0.5) rotateY(90deg)}50%{transform:scale(1.1) rotateY(-10deg)}100%{opacity:1;transform:scale(1) rotateY(0)}}
   .animate-fade-up{animation:fadeUp .8s cubic-bezier(.16,1,.3,1) forwards}
   .animate-fade-in{animation:fadeIn .6s ease forwards}
   .animate-slide-down{animation:slideDown .5s ease forwards}
@@ -43,19 +43,18 @@
   .hero-bg{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(212,168,67,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 20%,rgba(212,168,67,.03) 0%,transparent 50%),var(--vault-bg)}
   .grid-bg{background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px}
   .product-card-hidden{opacity:0;transform:translateY(20px)}.product-card-visible{opacity:1;transform:translateY(0);transition:all .6s cubic-bezier(.16,1,.3,1)}
-  .quiz-option{transition:all .2s ease;cursor:pointer}.quiz-option:hover{border-color:var(--gold);background:rgba(212,168,67,.05)}.quiz-option.correct{border-color:#22C55E!important;background:rgba(34,197,94,.1)!important}.quiz-option.wrong{border-color:#EF4444!important;background:rgba(239,68,68,.1)!important}
+  .quiz-option{transition:all .2s ease;cursor:pointer;user-select:none}.quiz-option:hover:not(.correct):not(.wrong){border-color:var(--gold);background:rgba(212,168,67,.05)}.quiz-option.correct{border-color:#22C55E!important;background:rgba(34,197,94,.1)!important;color:#22C55E!important}.quiz-option.wrong{border-color:#EF4444!important;background:rgba(239,68,68,.1)!important;color:#EF4444!important}
   .stat-number{font-variant-numeric:tabular-nums}
-  /* Nav active link */
   .nav-link{position:relative;transition:color .3s ease}.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--gold);transition:width .3s ease}.nav-link.active{color:#fff}.nav-link.active::after{width:100%}
-  /* Category dropdown custom styling */
   .cat-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238888A0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:40px}
-  /* Disclaimer scrollable */
-  .disclaimer-scroll{max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#333344 transparent}.disclaimer-scroll::-webkit-scrollbar{width:4px}.disclaimer-scroll::-webkit-scrollbar-track{background:transparent}.disclaimer-scroll::-webkit-scrollbar-thumb{background:#333344;border-radius:2px}.disclaimer-scroll::-webkit-scrollbar-thumb:hover{background:#444466}
-  /* Back to top */
+  .disclaimer-scroll{max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#333344 transparent}.disclaimer-scroll::-webkit-scrollbar{width:4px}.disclaimer-scroll::-webkit-scrollbar-track{background:transparent}.disclaimer-scroll::-webkit-scrollbar-thumb{background:#333344;border-radius:2px}
   #backToTop{opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.16,1,.3,1)}#backToTop.visible{opacity:1;pointer-events:auto}
-  /* Random button pulse */
   @keyframes randomPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,168,67,.4)}50%{box-shadow:0 0 0 8px rgba(212,168,67,0)}}
   .random-pulse{animation:randomPulse 2s ease infinite}
+  .grade-badge{animation:gradeReveal .8s cubic-bezier(.16,1,.3,1) forwards}
+  .grade-star{display:inline-block;transition:all .3s ease}.grade-star.filled{color:var(--gold);text-shadow:0 0 10px rgba(212,168,67,.5)}.grade-star.empty{color:#333344}
+  .quiz-option .option-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;opacity:.4;margin-bottom:2px}
+  #user-data{display:none}
   @media(max-width:768px){.hero-title{font-size:2.5rem!important}.hero-subtitle{font-size:1rem!important}}
 </style>
 </head>
@@ -75,14 +74,11 @@
       <a href="#about" class="nav-link text-sm text-gray-400 hover:text-white" onclick="smoothNav(event,'#about')">About</a>
     </div>
     <div class="flex items-center gap-3">
-      <button onclick="openRandomProduct()" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-105 random-pulse" style="border:1px solid rgba(212,168,67,.3);color:var(--gold);background:rgba(212,168,67,.05)">
-        <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>Random
-      </button>
+      <button onclick="openRandomProduct()" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 hover:scale-105 random-pulse" style="border:1px solid rgba(212,168,67,.3);color:var(--gold);background:rgba(212,168,67,.05)"><i data-lucide="shuffle" class="w-3.5 h-3.5"></i>Random</button>
       <button onclick="smoothNav(null,'#vault')" class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark))"><i data-lucide="unlock" class="w-4 h-4"></i>Open Vault</button>
       <button id="mobileMenuBtn" class="sm:hidden w-10 h-10 flex items-center justify-center rounded-lg border border-white/10"><i data-lucide="menu" class="w-5 h-5"></i></button>
     </div>
   </div>
-  <!-- Mobile Menu -->
   <div id="mobileMenu" class="sm:hidden hidden border-t border-white/5 px-5 py-4 space-y-1" style="background:rgba(6,6,10,.95)">
     <a href="#vault" class="flex items-center gap-3 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5" onclick="closeMobile();smoothNav(event,'#vault')"><i data-lucide="lock" class="w-4 h-4"></i>Vault</a>
     <a href="#leaderboard" class="flex items-center gap-3 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5" onclick="closeMobile();smoothNav(event,'#leaderboard')"><i data-lucide="flame" class="w-4 h-4"></i>Leaderboard</a>
@@ -128,15 +124,12 @@
       <p class="text-base sm:text-lg font-light" style="color:var(--text-secondary)">Every product. Its real cost. The markup they don't want you to see.</p>
     </div>
     <div class="mb-10 sm:mb-14 space-y-4">
-      <!-- Search -->
       <div class="relative max-w-2xl mx-auto">
         <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style="color:var(--text-dim)"></i>
         <input type="text" id="searchInput" placeholder="Search products, brands, categories..." class="w-full pl-12 pr-12 py-4 rounded-2xl text-sm sm:text-base outline-none transition-all duration-300 focus:ring-2" style="background:var(--vault-card);border:1px solid var(--vault-border);color:var(--text-primary);--tw-ring-color:rgba(212,168,67,.3)" oninput="debounceSearch()">
         <button id="clearSearch" class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-colors hover:bg-white/10 hidden" style="color:var(--text-dim)" onclick="clearSearch()"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
-      <!-- Filters Row: Dropdown + Sort + Random -->
       <div class="flex flex-wrap items-center justify-center gap-3">
-        <!-- Category Dropdown -->
         <div class="relative">
           <select id="categorySelect" onchange="setCategory(this.value)" class="cat-select text-sm px-4 py-2.5 pr-10 rounded-xl outline-none cursor-pointer min-w-[180px]" style="background:var(--vault-card);border:1px solid var(--vault-border);color:var(--text-secondary)">
             <option value="all">All Categories</option>
@@ -149,7 +142,6 @@
             <option value="education">Education</option>
           </select>
         </div>
-        <!-- Sort Dropdown -->
         <select id="sortSelect" onchange="filterProducts()" class="cat-select text-sm px-4 py-2.5 pr-10 rounded-xl outline-none cursor-pointer" style="background:var(--vault-card);border:1px solid var(--vault-border);color:var(--text-secondary)">
           <option value="markup-desc">Highest Markup</option>
           <option value="markup-asc">Lowest Markup</option>
@@ -158,12 +150,8 @@
           <option value="price-desc">Most Expensive</option>
           <option value="price-asc">Cheapest</option>
         </select>
-        <!-- Random Button -->
-        <button onclick="openRandomProduct()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105" style="border:1px solid rgba(212,168,67,.25);color:var(--gold);background:rgba(212,168,67,.05)">
-          <i data-lucide="shuffle" class="w-4 h-4"></i>Surprise Me
-        </button>
+        <button onclick="openRandomProduct()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105" style="border:1px solid rgba(212,168,67,.25);color:var(--gold);background:rgba(212,168,67,.05)"><i data-lucide="shuffle" class="w-4 h-4"></i>Surprise Me</button>
       </div>
-      <!-- Category count pills (quick filter chips below dropdowns) -->
       <div class="flex flex-wrap justify-center gap-2" id="categoryChips"></div>
     </div>
     <div class="mb-6 text-sm" style="color:var(--text-dim)"><span id="resultCount">0</span> products exposed</div>
@@ -201,7 +189,12 @@
       <div id="quizStart" class="text-center py-8">
         <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.15);animation:pulse-gold 3s infinite"><i data-lucide="trophy" class="w-9 h-9" style="color:var(--gold)"></i></div>
         <h3 class="text-2xl font-bold mb-3">Ready to Be Shocked?</h3>
-        <p class="text-sm mb-8 max-w-md mx-auto" style="color:var(--text-secondary)">We'll show you a product's retail price. You guess the actual manufacturing cost. 10 questions.</p>
+        <p class="text-sm mb-6 max-w-md mx-auto" style="color:var(--text-secondary)">We'll show you a product's retail price. You guess the actual manufacturing cost. 10 random questions, graded from Level 1 to 5.</p>
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs" style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.12);color:var(--text-dim)"><i data-lucide="help-circle" class="w-3.5 h-3.5 text-red-500"></i>Level 1: Marketer's Dream</div>
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs" style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.12);color:var(--text-dim)"><i data-lucide="lightbulb" class="w-3.5 h-3.5 text-blue-500"></i>Level 3: Getting There</div>
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs" style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.12);color:var(--text-dim)"><i data-lucide="trophy" class="w-3.5 h-3.5 text-green-500"></i>Level 5: Pricing Expert</div>
+        </div>
         <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark))"><i data-lucide="play" class="w-4 h-4"></i>Start Quiz</button>
       </div>
       <div id="quizActive" class="hidden">
@@ -215,41 +208,77 @@
           <p class="mt-4 text-sm font-medium" style="color:var(--text-secondary)">What is the actual cost to make this?</p>
         </div>
         <div id="quizOptions" class="grid grid-cols-2 gap-3 mb-6"></div>
-        <div id="quizFeedback" class="hidden text-center py-4 rounded-2xl mb-6" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><p id="quizFeedbackText" class="text-sm font-medium"></p><p id="quizFactText" class="text-xs mt-2" style="color:var(--text-dim)"></p></div>
+        <div id="quizFeedback" class="hidden text-center py-4 px-5 rounded-2xl mb-6" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><p id="quizFeedbackText" class="text-sm font-medium"></p><p id="quizFactText" class="text-xs mt-2" style="color:var(--text-dim)"></p></div>
         <button id="quizNextBtn" class="hidden w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90" style="background:var(--vault-border);color:var(--text-secondary)" onclick="nextQuizQuestion()">Next Question</button>
       </div>
-      <div id="quizResult" class="hidden text-center py-8">
-        <div class="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" id="quizResultIcon" style="background:rgba(212,168,67,.1);border:2px solid var(--gold)"><i data-lucide="trophy" class="w-10 h-10" style="color:var(--gold)"></i></div>
-        <h3 class="text-3xl font-bold mb-2" id="quizResultTitle"></h3>
-        <p class="text-lg mb-2" style="color:var(--text-secondary)">You scored</p>
-        <div class="text-5xl font-bold font-mono mb-2" style="color:var(--gold)" id="quizFinalScore"></div>
-        <p class="text-sm mb-8 max-w-md mx-auto" style="color:var(--text-dim)" id="quizResultMessage"></p>
+      <div id="quizResult" class="hidden text-center py-6">
+        <div id="quizGradeBadge" class="grade-badge w-28 h-28 mx-auto mb-6 rounded-full flex flex-col items-center justify-center relative" style="background:var(--vault-bg);border:3px solid var(--vault-border)"><div class="text-4xl font-black font-mono" id="quizGradeNumber">1</div><div class="text-[10px] font-bold tracking-widest uppercase" id="quizGradeLabel" style="color:var(--text-dim)">Grade</div></div>
+        <div class="flex items-center justify-center gap-1 mb-4" id="quizGradeStars"></div>
+        <h3 class="text-2xl sm:text-3xl font-bold mb-2" id="quizResultTitle"></h3>
+        <p class="text-sm mb-1" style="color:var(--text-secondary)">You scored</p>
+        <div class="text-5xl font-bold font-mono mb-1" style="color:var(--gold)" id="quizFinalScore"></div>
+        <p class="text-xs font-mono mb-6" style="color:var(--text-dim)" id="quizFinalPercent"></p>
+        <p class="text-sm mb-8 max-w-md mx-auto leading-relaxed" style="color:var(--text-dim)" id="quizResultMessage"></p>
+        <div class="rounded-xl p-4 mb-8 max-w-sm mx-auto" style="background:var(--vault-bg);border:1px solid var(--vault-border)">
+          <p class="text-xs font-medium mb-2" style="color:var(--text-secondary)">How grading works:</p>
+          <div class="grid grid-cols-5 gap-1 text-center">
+            <div><div class="text-xs font-bold text-red-500">Lv 1</div><div class="text-[10px]" style="color:var(--text-dim)">0-29%</div></div>
+            <div><div class="text-xs font-bold text-orange-500">Lv 2</div><div class="text-[10px]" style="color:var(--text-dim)">30-49%</div></div>
+            <div><div class="text-xs font-bold text-blue-500">Lv 3</div><div class="text-[10px]" style="color:var(--text-dim)">50-69%</div></div>
+            <div><div class="text-xs font-bold" style="color:var(--gold)">Lv 4</div><div class="text-[10px]" style="color:var(--text-dim)">70-89%</div></div>
+            <div><div class="text-xs font-bold text-green-500">Lv 5</div><div class="text-[10px]" style="color:var(--text-dim)">90-100%</div></div>
+          </div>
+        </div>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
           <button onclick="startQuiz()" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold text-black transition-all duration-300 hover:scale-105" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark))"><i data-lucide="rotate-ccw" class="w-4 h-4"></i>Play Again</button>
-          <button onclick="smoothNav(null,'#vault')" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium border transition-all duration-300 hover:bg-white/5" style="border-color:var(--vault-border);color:var(--text-secondary)">Explore Vault</button>
+          <button onclick="smoothNav(null,'#vault')" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium border transition-all duration-300 hover:bg-white/5" style="border-color:var(--vault-border);color:var(--text-secondary)"><i data-lucide="lock" class="w-4 h-4"></i>Explore Vault</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ABOUT + DISCLAIMER -->
+<!-- ABOUT -->
 <section id="about" class="relative py-20 sm:py-32" style="background:linear-gradient(180deg,transparent,rgba(212,168,67,.02),transparent)">
-  <div class="max-w-4xl mx-auto px-5 sm:px-8 text-center">
-    <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-6">Why This <span class="gold-shimmer">Exists</span></h2>
-    <p class="text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto mb-12" style="color:var(--text-secondary)">Every day, billions of people buy things without knowing what they actually cost to make. This vault exists to change that.</p>
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="text-center mb-14">
+      <h2 class="font-display text-3xl sm:text-5xl font-bold tracking-tight mb-6">The <span class="gold-shimmer">Truth</span> Behind The Price Tag</h2>
+      <p class="text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto" style="color:var(--text-secondary)">Every day, billions of people buy things without knowing what they actually cost to make. This vault exists to change that — one shocking markup at a time.</p>
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-14">
       <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15)"><i data-lucide="file-check" class="w-5 h-5 text-green-500"></i></div><h3 class="font-semibold mb-2">Researched Data</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Cost figures derived from publicly available industry reports, teardowns, and wholesale pricing</p></div>
       <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.15)"><i data-lucide="database" class="w-5 h-5" style="color:var(--gold)"></i></div><h3 class="font-semibold mb-2">Growing Database</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">New products added regularly. The vault never stops growing.</p></div>
-      <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15)"><i data-lucide="shield-alert" class="w-5 h-5 text-red-500"></i></div><h3 class="font-semibold mb-2">No Sponsorships</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Not affiliated with any brand. Independent research, no bias.</p></div>
+      <div class="rounded-2xl p-6" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="w-12 h-12 mx-auto mb-4 rounded-xl flex items-center justify-center" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15)"><i data-lucide="shield-alert" class="w-5 h-5 text-red-500"></i></div><h3 class="font-semibold mb-2">No Sponsorships</h3><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Not affiliated with any brand. Independent research, zero bias.</p></div>
     </div>
-    <!-- DISCLAIMER - Scrollable -->
-    <div class="max-w-2xl mx-auto rounded-2xl overflow-hidden" style="background:rgba(255,255,255,.015);border:1px solid var(--vault-border)">
-      <div class="flex items-center gap-3 px-6 py-4" style="border-bottom:1px solid var(--vault-border)">
-        <i data-lucide="shield-info" class="w-5 h-5 shrink-0" style="color:var(--text-dim)"></i>
-        <span class="text-sm font-semibold" style="color:var(--text-secondary)">Disclaimer and Data Transparency</span>
-        <span class="text-[10px] px-2 py-0.5 rounded-full ml-auto shrink-0" style="background:rgba(212,168,67,.08);color:var(--gold);border:1px solid rgba(212,168,67,.15)">Scroll to read</span>
+    <div class="max-w-3xl mx-auto mb-14">
+      <h3 class="text-xl font-semibold mb-5 text-center">Our Mission</h3>
+      <div class="space-y-4 text-sm leading-relaxed" style="color:var(--text-secondary)">
+        <p>Find Deal Vault was born from a simple question: <em>"How much does this actually cost to make?"</em> That question led us down a rabbit hole of industry reports, teardown analyses, wholesale pricing data, and investigative journalism — and what we found shocked us.</p>
+        <p>A ₹25,000 designer handbag that costs ₹8,000 to manufacture. A ₹350 coffee that uses ₹18 worth of ingredients. A ₹1,900 phone cable that costs ₹150 to produce. The pattern was consistent: brands are making enormous profits while consumers remain in the dark about true production costs.</p>
+        <p>We're not anti-business or anti-profit. Companies need to cover R&D, marketing, distribution, and make a reasonable return. But when markups reach 1,000%, 5,000%, or even 8,000% — as you'll see in our vault — something has gone wrong in the transparency of our markets.</p>
+        <p>Our goal isn't to tell you what to buy or not buy. It's simply to provide the information that should be publicly available but isn't. Armed with this knowledge, you can make more informed decisions, negotiate better, or simply appreciate the psychology behind why we pay what we pay.</p>
+        <p>Every product in our vault is backed by research from credible sources. We show our methodology, cite our sources, and clearly state when figures are estimates. We believe in radical transparency — because that's exactly what's missing from the pricing of most consumer goods.</p>
       </div>
+    </div>
+    <div class="max-w-3xl mx-auto mb-14">
+      <h3 class="text-xl font-semibold mb-5 text-center">How We Calculate Costs</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="rounded-xl p-5" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(212,168,67,.1)"><i data-lucide="search" class="w-4 h-4" style="color:var(--gold)"></i></div><h4 class="font-medium text-sm">Source Gathering</h4></div><p class="text-xs leading-relaxed" style="color:var(--text-dim)">We collect data from industry reports, product teardowns, wholesale pricing, and investigative journalism across multiple countries.</p></div>
+        <div class="rounded-xl p-5" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(212,168,67,.1)"><i data-lucide="calculator" class="w-4 h-4" style="color:var(--gold)"></i></div><h4 class="font-medium text-sm">Cost Estimation</h4></div><p class="text-xs leading-relaxed" style="color:var(--text-dim)">We calculate material, labor, and basic overhead costs. These are estimates representing typical production, not exact figures.</p></div>
+        <div class="rounded-xl p-5" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(212,168,67,.1)"><i data-lucide="percent" class="w-4 h-4" style="color:var(--gold)"></i></div><h4 class="font-medium text-sm">Markup Calculation</h4></div><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Markup = ((Retail Price − Cost Price) / Cost Price) × 100. Simple math, shocking results every time.</p></div>
+        <div class="rounded-xl p-5" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(212,168,67,.1)"><i data-lucide="shield-check" class="w-4 h-4" style="color:var(--gold)"></i></div><h4 class="font-medium text-sm">Verification</h4></div><p class="text-xs leading-relaxed" style="color:var(--text-dim)">We cross-reference multiple sources and update figures as new data becomes available. Sources are cited per product.</p></div>
+      </div>
+    </div>
+    <div class="max-w-3xl mx-auto mb-14">
+      <h3 class="text-xl font-semibold mb-5 text-center">Who Is This For?</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="rounded-xl p-5 text-center" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="text-2xl mb-3">🛒</div><h4 class="font-medium text-sm mb-2">Smart Shoppers</h4><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Negotiate better, buy smarter, and stop paying for brand perception alone.</p></div>
+        <div class="rounded-xl p-5 text-center" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="text-2xl mb-3">📊</div><h4 class="font-medium text-sm mb-2">Curious Minds</h4><p class="text-xs leading-relaxed" style="color:var(--text-dim)">Understand the hidden economics behind everyday products and industries.</p></div>
+        <div class="rounded-xl p-5 text-center" style="background:var(--vault-card);border:1px solid var(--vault-border)"><div class="text-2xl mb-3">🎓</div><h4 class="font-medium text-sm mb-2">Students & Educators</h4><p class="text-xs leading-relaxed" style="color:var(--text-dim)">A practical resource for economics, business, and consumer awareness education.</p></div>
+      </div>
+    </div>
+    <div class="max-w-2xl mx-auto rounded-2xl overflow-hidden" style="background:rgba(255,255,255,.015);border:1px solid var(--vault-border)">
+      <div class="flex items-center gap-3 px-6 py-4" style="border-bottom:1px solid var(--vault-border)"><i data-lucide="shield-info" class="w-5 h-5 shrink-0" style="color:var(--text-dim)"></i><span class="text-sm font-semibold" style="color:var(--text-secondary)">Disclaimer & Data Transparency</span><span class="text-[10px] px-2 py-0.5 rounded-full ml-auto shrink-0" style="background:rgba(212,168,67,.08);color:var(--gold);border:1px solid rgba(212,168,67,.15)">Scroll to read</span></div>
       <div class="disclaimer-scroll px-6 py-5">
         <div class="space-y-3 text-xs sm:text-sm leading-relaxed" style="color:var(--text-dim)">
           <p>All manufacturing cost estimates presented on this website are based on independent online research compiled from publicly available industry reports, product teardown analyses, wholesale marketplace pricing, investigative journalism, and commodity price data. These figures represent <strong style="color:var(--text-secondary)">approximate averages</strong> derived from multiple sources and should <strong style="color:var(--text-secondary)">not be treated as exact or definitive manufacturing costs</strong>.</p>
@@ -266,11 +295,8 @@
 <!-- FOOTER -->
 <footer class="py-10 border-t" style="border-color:var(--vault-border)">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="flex items-center gap-2">
-      <div class="w-6 h-6 rounded flex items-center justify-center" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark))"><i data-lucide="lock-keyhole" class="w-3 h-3 text-black"></i></div>
-      <span class="text-sm font-semibold">FindDeal<span style="color:var(--gold)">Vault</span></span>
-    </div>
-    <p class="text-xs text-center" style="color:var(--text-dim)">The real deal is what they are not telling you. 2025. Cost figures are approximate estimates.</p>
+    <div class="flex items-center gap-2"><div class="w-6 h-6 rounded flex items-center justify-center" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark))"><i data-lucide="lock-keyhole" class="w-3 h-3 text-black"></i></div><span class="text-sm font-semibold">FindDeal<span style="color:var(--gold)">Vault</span></span></div>
+    <p class="text-xs text-center" style="color:var(--text-dim)">The real deal is what they are not telling you. &copy; 2025. Cost figures are approximate estimates.</p>
     <div class="flex items-center gap-4">
       <a href="#about" onclick="smoothNav(event,'#about');return false;" class="text-xs transition-colors hover:text-white" style="color:var(--text-dim)">Disclaimer</a>
       <a href="#" class="text-xs transition-colors hover:text-white" style="color:var(--text-dim)">Sources</a>
@@ -279,12 +305,8 @@
   </div>
 </footer>
 
-<!-- BACK TO TOP BUTTON -->
-<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));box-shadow:0 4px 20px rgba(212,168,67,.3)">
-  <i data-lucide="arrow-up" class="w-5 h-5 text-black"></i>
-</button>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 z-[90] w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));box-shadow:0 4px 20px rgba(212,168,67,.3)"><i data-lucide="arrow-up" class="w-5 h-5 text-black"></i></button>
 
-<!-- MODAL -->
 <div id="productModal" class="fixed inset-0 z-[100] hidden">
   <div class="modal-overlay absolute inset-0" style="background:rgba(0,0,0,.7)" onclick="closeModal()"></div>
   <div class="relative z-10 flex items-center justify-center min-h-screen p-4 sm:p-8">
@@ -292,10 +314,36 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toastContainer" class="fixed top-24 right-4 z-[200] space-y-2"></div>
 
-<!-- ==================== MAIN APPLICATION SCRIPT ==================== -->
+<!-- ================================================================
+     PASTE YOUR NOTEPAD DATA BELOW THIS LINE
+     ================================================================
+     FORMAT: Product Name|Brand|Emoji|Category|CostPrice|RetailPrice|Currency|Made In|Materials|Story|Source|Tags
+
+     CATEGORIES: fashion, electronics, cosmetics, food, health, services, education
+     CURRENCY: ₹ or $ or €
+     TAGS: comma separated, lowercase
+     NOTE: Do NOT use | inside any field.
+
+     EXAMPLES (delete these before adding real data):
+
+     iPhone 16 Pro Max|Apple|📱|electronics|45000|159900|₹|China/India|A17 Pro chip: ₹12000, Display: ₹8000, Camera: ₹6000, Battery: ₹1500, Other: ₹17500|Apple BOM estimate based on iFixit teardown analysis|iFixit, TechInsights|iphone,apple,smartphone
+     Levi's 501 Jeans|Levi's|👖|fashion|600|5499|₹|Vietnam|Denim: ₹250, Buttons: ₹80, Labor: ₹150, Finishing: ₹80, Packaging: ₹40|Same quality from unbranded maker costs a fraction|Alibaba wholesale|jeans,fashion,denim,levis
+     Red Bull 250ml|Red Bull|🥫|food|8|125|₹|India|Water: ₹0.5, Caffeine: ₹2, Sugar: ₹1, Can: ₹3, Carbonation: ₹0.5|Most money goes to extreme sports marketing|Beverage industry|redbull,beverage,energy
+
+     ================================================================ -->
+<div id="user-data">
+Charging Cable|Mobile|📱|electronics|57 to 110|299 to 999|₹|China/India|Parts & Raw Material: ₹ 20 to 35, Labor & Assembling: ₹ 12 to 25, Package, Shipping & Marketing: ₹25 to 50, Total CTC: ₹ 57 to 110|Rahul bought a sleek, unbranded Type-C cable from a local flea market for just ₹100. It looked exactly like his friend's original cable. Delighted with the cheap price, he plugged it into his fast charger. Within two weeks, the phone stopped fast-charging, and the connector became so hot it melted the USB port inside his phone. The cable's actual manufacturing cost was likely just ₹5, as it contained thin copper-clad aluminum wiring and no safety microchips. Safety Certifications: Always check for verified safety certifications like USB-IF or MFi (for Apple devices) to avoid overheating and battery damage. Wire Gauge (AWG): Thicker copper cores carry higher current safely. A thicker cable (lower AWG number) is required for 65W to 100W fast charging. Warranty: Premium cables generally offer 6 to 12 months of replacement warranty, reflecting manufacturer confidence. Setting up a mobile accessory business is highly lucrative if you navigate the supply chain smartly. Choose Your Business Model: Private Label / D2C (Direct-to-Consumer): Source directly from wholesale manufacturing hubs like Delhi (e.g., Sultanpuri) or Shenzhen (China). Import bulk unbranded or semi-branded stock. You can then apply your own premium branding, create custom packaging, and build a D2C e-commerce brand. Low-Investment Setup: Purchase raw materials (PCB, wires, shells) and automated soldering/molding machinery to assemble cables locally. Focus on High-Margin Products: Instead of basic 10W cables, shift inventory to high-demand, premium categories like 100W Power Delivery (PD) cables, silicone liquid cables, or multi-port 3-in-1 data cables, which allow for significantly higher markups. Wholesale Distribution & Bundle Deals: Supply retail mobile shops in bulk. Offer lucrative margin-sharing to local vendors (e.g., giving them a 40% margin) to push your products to consumers. Alternatively, offer bundles (e.g., free cable with a high-speed adapter purchase) to increase the average order value.|IndiaMart (Bright Industries), Vexos Cable Harness Cost Breakdown|charging cable,iphone,apple,smartphone
+
+Basic 12-digit electronic calculator|Generic|🧮|electronics|90 to 110|250 to 300|₹|China/India|Parts & Raw Material: ₹ 50, Labor & Assembling: ₹ 15, Package, Shipping, Rent, Utilities, Machinery & Marketing: ₹ 35, Total CTC: ₹ 100|Rohan was an accountant who needed a standard desktop calculator. At the corner stationery store, he saw two 12-digit calculators. The first, a renowned brand, had an MRP of ₹500. The second, sitting in a generic box, had an MRP of ₹150. Confused by the huge difference, he realized that the ₹500 device wasn't functionally superior for basic arithmetic; he was largely paying for the established brand's massive advertising budget and premium packaging. What Buyers Should Consider: Real Utility vs. Brand Value: Don't pay a premium for a globally advertised brand if you only need the device for basic addition and subtraction. Warranty and Key Responsiveness: Test the bounce of the keys (some cheap buttons stick) and verify the durability if buying unknown labels. How a Businessman Makes Profit: Economies of Scale: By manufacturing or importing in bulk (thousands of units), material and shipping costs can drop significantly, increasing margins. Distribution Channels: Instead of relying on traditional distribution chains which eat up 30% of profit, businessmen utilize Direct-to-Consumer (DTC) routes through online e-commerce platforms. High-Value Variations: Businessmen increase profitability by adding advanced variants (like tax-calculating keys or GST buttons), which cost nearly the same to manufacture but command a 50% higher MRP.|IndiaMart, Casio India, Moglix Office Supplies|calculator,electronics,office,stationery
+
+Home Water Purifiers|Water Purifiers|📱|electronics|3500|15000|₹|China/India|Raw Parts: ₹2000, Factory Labor: ₹500, Factory, Marketing. Distribution: ₹1000|Cost vs. MRP: A Real Story : Meet Abhishek, who recently bought an RO purifier for Rs. 14,999 (MRP). He noticed an identical-looking unbranded machine online for Rs. 6,000. He initially felt cheated. However, the Rs. 6,000 machine lacked certified food-grade plastics, tested RO membranes, and most importantly, a company technician for installation and maintenance. Abhishek’s MRP covered the hidden costs of peace of mind—safety certifications, local technicians, and a warranty. Buyers should consider water quality (TDS), filter lifespan (cost of replacing consumables), and service availability over the sticker price.Business Profit Guide: How to Make MoneyA businessman can make a consistent profit in the water purification industry in two main ways:1. Trading/Distribution (Retail route):Dealership Margins: Retailers generally keep a 20-30% margin by purchasing directly from manufacturers in bulk.Smart Selling: Offer bundled packages that include the machine + 1 or 2 years of Annual Maintenance Contracts (AMCs).2. Setting Up an RO Water Plant (Commercial route):Turnkey Setup: Investing in a commercial purification and bottling setup costs anywhere from Rs. 5 to 15 lakhs for a small setup.Profits: Selling purified water in 20-liter jars or smaller bottles yields high volume returns, resulting in gross profit margins of 25% to 40%.Repeat Demand: Because jars are consumed daily by offices and households, the recurring revenue stream ensures consistent cash flow.|Benori Insights, Market Data from Tata Capital, Tradeindia|iphone,apple,smartphone
+
+
+</div>
+
+<!-- ==================== MAIN SCRIPT ==================== -->
 <script>
 var PRODUCTS=[
 {id:1,name:"Designer Sunglasses",brand:"Premium Luxury Brands",emoji:"🕶️",category:"fashion",costPrice:500,retailPrice:25000,currency:"₹",madeIn:"Italy / China",materials:"Plastic/frame: ₹200, Lenses: ₹150, Packaging: ₹50, Labor: ₹100",story:"Most designer sunglasses are made by the same Italian company, Luxottica, which owns Ray-Ban, Oakley, and makes glasses for Chanel, Prada, Versace, and dozens more. The markup is almost entirely brand perception.",source:"Industry reports, Luxottica annual filings",tags:["luxury","sunglasses","eyewear","luxottica"]},
@@ -321,7 +369,7 @@ var PRODUCTS=[
 ];
 
 var currentCategory='all';
-var quizState={current:0,score:0,questions:[],answered:false};
+var quizState={current:0,score:0,questions:[],answered:false,grade:0};
 var searchTimer=null;
 var CATEGORIES=[
   {key:'all',label:'All',emoji:'🔓'},
@@ -334,43 +382,141 @@ var CATEGORIES=[
   {key:'education',label:'Education',emoji:'📚'}
 ];
 
-/* Parse Notepad Data */
-function parseUserData(){
-  var el=document.getElementById('user-data');if(!el)return;
-  var text=el.textContent.trim();if(!text)return;
-  var lines=text.split('\n'),nextId=PRODUCTS.length>0?Math.max.apply(null,PRODUCTS.map(function(p){return p.id}))+1:1,added=0;
-  for(var i=0;i<lines.length;i++){
-    var line=lines[i].trim();if(!line)continue;
-    if(line.toLowerCase().indexOf('product name')!==-1&&line.indexOf('|')!==-1)continue;
-    var c=line.split('|');if(c.length<11)continue;
-    var tagsRaw=c[11]?c[11].trim():'';
-    var tags=tagsRaw?tagsRaw.split(',').map(function(t){return t.trim().toLowerCase()}).filter(Boolean):[];
-    PRODUCTS.push({id:nextId++,name:c[0].trim(),brand:c[1].trim(),emoji:c[2].trim()||'📦',category:c[3].trim().toLowerCase(),costPrice:parseFloat(c[4])||0,retailPrice:parseFloat(c[5])||0,currency:c[6].trim()||'₹',madeIn:c[7].trim(),materials:c[8].trim(),story:c[9].trim(),source:c[10].trim(),tags:tags});
-    added++;
+/* ===== PARSE USER NOTEPAD DATA ===== */
+function parseRangeValue(str){
+  str=(str||'').trim();
+  /* Handle ranges like "57 to 110" or "90 to 110" — return midpoint */
+  var rangeMatch=str.match(/^([\d.]+)\s*(?:to|-|–|~)\s*([\d.]+)$/i);
+  if(rangeMatch){
+    var a=parseFloat(rangeMatch[1]),b=parseFloat(rangeMatch[2]);
+    if(!isNaN(a)&&!isNaN(b))return Math.round((a+b)/2);
   }
-  if(added>0)console.log('FindDealVault: '+added+' products loaded. Total: '+PRODUCTS.length);
+  /* Handle single number, possibly with currency symbol or comma */
+  var cleaned=str.replace(/[₹$€,\s]/g,'');
+  var num=parseFloat(cleaned);
+  return isNaN(num)?0:num;
 }
 
-/* Utilities */
-function formatPrice(a,c){c=c||'₹';if(a>=100000)return c+(a/100000).toFixed(1).replace(/\.0$/,'')+'L';if(a>=1000)return c+a.toLocaleString('en-IN');if(a<1)return c+a.toFixed(2);return c+Math.round(a).toLocaleString('en-IN')}
+function stripHtml(str){
+  var tmp=document.createElement('div');
+  tmp.innerHTML=str;
+  return tmp.textContent||tmp.innerText||'';
+}
+
+function parseUserData(){
+  var el=document.getElementById('user-data');
+  if(!el)return;
+  var text=el.textContent||'';
+  text=text.trim();
+  if(!text)return;
+  var lines=text.split('\n');
+  var nextId=PRODUCTS.length>0?Math.max.apply(null,PRODUCTS.map(function(p){return p.id}))+1:1;
+  var added=0;
+  var skipped=0;
+
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i].trim();
+    if(!line)continue;
+
+    /* Skip comment lines, headers, divider lines */
+    if(line.indexOf('===')!==-1||line.indexOf('---')!==-1)continue;
+    if(line.toLowerCase().indexOf('format:')===0)continue;
+    if(line.toLowerCase().indexOf('categories:')===0)continue;
+    if(line.toLowerCase().indexOf('currency:')===0)continue;
+    if(line.toLowerCase().indexOf('tags:')===0)continue;
+    if(line.toLowerCase().indexOf('note:')===0)continue;
+    if(line.toLowerCase().indexOf('examples')!==-1)continue;
+    if(line.toLowerCase().indexOf('product name')!==-1&&line.indexOf('|')!==-1)continue;
+    if(line.toLowerCase().indexOf('delete these')!==-1)continue;
+
+    var cols=line.split('|');
+    /* Need at least: name, brand, emoji, category, cost, retail, currency, madeIn, materials, story, source = 11 cols */
+    if(cols.length<11){
+      skipped++;
+      continue;
+    }
+
+    var name=cols[0].trim();
+    var brand=cols[1].trim();
+    var emoji=cols[2].trim()||'📦';
+    var category=(cols[3]||'').trim().toLowerCase();
+    var costPrice=parseRangeValue(cols[4]);
+    var retailPrice=parseRangeValue(cols[5]);
+    var currency=(cols[6]||'₹').trim();
+    var madeIn=(cols[7]||'').trim();
+    var materials=(cols[8]||'').trim();
+    var story=stripHtml(cols[9]||'').trim();
+    var source=(cols[10]||'').trim();
+    var tagsRaw=cols[11]?cols[11].trim():'';
+    var tags=tagsRaw?tagsRaw.split(',').map(function(t){return t.trim().toLowerCase()}).filter(Boolean):[];
+
+    /* Skip if essential data missing */
+    if(!name||costPrice<=0||retailPrice<=0){
+      skipped++;
+      continue;
+    }
+
+    /* Validate category */
+    var validCategories=['fashion','electronics','cosmetics','food','health','services','education'];
+    if(validCategories.indexOf(category)===-1){
+      category='fashion'; /* fallback */
+    }
+
+    PRODUCTS.push({
+      id:nextId++,
+      name:name,
+      brand:brand,
+      emoji:emoji,
+      category:category,
+      costPrice:costPrice,
+      retailPrice:retailPrice,
+      currency:currency,
+      madeIn:madeIn,
+      materials:materials,
+      story:story,
+      source:source,
+      tags:tags
+    });
+    added++;
+  }
+
+  if(added>0){
+    console.log('✅ FindDealVault: '+added+' products loaded from notepad data. Total: '+PRODUCTS.length);
+    showToast(added+' custom products added to the vault!','success');
+  }
+  if(skipped>0){
+    console.log('⚠️ FindDealVault: '+skipped+' lines skipped (invalid format or comments).');
+  }
+}
+
+/* ===== UTILITIES ===== */
+function formatPrice(a,c){
+  c=c||'₹';
+  if(a>=100000)return c+(a/100000).toFixed(1).replace(/\.0$/,'')+'L';
+  if(a>=1000)return c+a.toLocaleString('en-IN');
+  if(a<1)return c+a.toFixed(2);
+  return c+Math.round(a).toLocaleString('en-IN');
+}
 function getMarkup(c,r){if(c<=0)return 0;return Math.round(((r-c)/c)*100)}
 function getMarkupColor(m){if(m>=5000)return'#DC2626';if(m>=1000)return'#EF4444';if(m>=500)return'#F97316';if(m>=100)return'#EAB308';if(m>=50)return'#84CC16';return'#22C55E'}
 function getMarkupLabel(m){if(m>=5000)return'CRIMINAL';if(m>=1000)return'INSANE';if(m>=500)return'OUTRAGEOUS';if(m>=100)return'HIGH';if(m>=50)return'MODERATE';return'LOW'}
 function showToast(msg,type){type=type||'info';var c=document.getElementById('toastContainer'),t=document.createElement('div');var bg=type==='success'?'rgba(34,197,94,.15)':type==='error'?'rgba(239,68,68,.15)':'rgba(212,168,67,.15)';var bd=type==='success'?'rgba(34,197,94,.3)':type==='error'?'rgba(239,68,68,.3)':'rgba(212,168,67,.3)';var cl=type==='success'?'#22C55E':type==='error'?'#EF4444':'#D4A843';t.className='toast px-5 py-3 rounded-xl text-sm font-medium';t.style.cssText='background:'+bg+';border:1px solid '+bd+';color:'+cl+';backdrop-filter:blur(12px);min-width:250px';t.textContent=msg;c.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},3000)}
-function shareProduct(p){var m=getMarkup(p.costPrice,p.retailPrice);var txt=p.name+' costs only '+formatPrice(p.costPrice)+' to make but sells for '+formatPrice(p.retailPrice)+'! That is a '+m.toLocaleString()+'% markup. See more at findealvault.online';if(navigator.share){navigator.share({title:'Find Deal Vault',text:txt,url:window.location.href})}else{navigator.clipboard.writeText(txt).then(function(){showToast('Copied to clipboard!','success')})}}
+function shareProduct(p){var m=getMarkup(p.costPrice,p.retailPrice);var txt=p.name+' costs only '+formatPrice(p.costPrice)+' to make but sells for '+formatPrice(p.retailPrice)+'! That is a '+m.toLocaleString()+'% markup. See more at FindDealVault.';if(navigator.share){navigator.share({title:'Find Deal Vault',text:txt,url:window.location.href})}else{navigator.clipboard.writeText(txt).then(function(){showToast('Copied to clipboard!','success')})}}
 function findProduct(id){for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id)return PRODUCTS[i]}return null}
+function smoothNav(e,id){if(e)e.preventDefault();var el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth'})}
 
-/* Random Product */
+/* ===== MOBILE MENU ===== */
+document.getElementById('mobileMenuBtn').addEventListener('click',function(){document.getElementById('mobileMenu').classList.toggle('hidden')});
+function closeMobile(){document.getElementById('mobileMenu').classList.add('hidden')}
+
+/* ===== RANDOM PRODUCT ===== */
 function openRandomProduct(){
   if(PRODUCTS.length===0){showToast('No products in the vault yet','error');return}
   var idx=Math.floor(Math.random()*PRODUCTS.length);
   openModal(PRODUCTS[idx].id);
 }
 
-/* Smooth Nav */
-function smoothNav(e,id){if(e)e.preventDefault();var el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth'})}
-
-/* Category Chips */
+/* ===== CATEGORY CHIPS ===== */
 function renderCategoryChips(){
   var container=document.getElementById('categoryChips');
   var html='';
@@ -385,7 +531,7 @@ function renderCategoryChips(){
   container.innerHTML=html;
 }
 
-/* Render Cards */
+/* ===== RENDER PRODUCT CARDS ===== */
 function renderProducts(products){
   var grid=document.getElementById('productGrid'),empty=document.getElementById('emptyState');
   document.getElementById('resultCount').textContent=products.length;
@@ -394,149 +540,258 @@ function renderProducts(products){
   var h='';
   for(var i=0;i<products.length;i++){
     var p=products[i],mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu),ml=getMarkupLabel(mu),cw=Math.max(3,(p.costPrice/p.retailPrice)*100);
-    h+='<div class="product-card-hidden card-hover rounded-2xl cursor-pointer overflow-hidden group" style="background:var(--vault-card);border:1px solid var(--vault-border);transition-delay:'+(i*50)+'ms" onclick="openModal('+p.id+')"><div class="p-5 sm:p-6"><div class="flex items-start justify-between mb-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div class="min-w-0"><h3 class="font-semibold text-sm sm:text-base truncate">'+p.name+'</h3><p class="text-xs truncate" style="color:var(--text-dim)">'+p.brand+'</p></div></div><div class="text-right shrink-0 ml-2"><div class="text-xs font-mono font-bold" style="color:'+mc+'">'+mu.toLocaleString()+'%</div><div class="text-[10px] font-medium tracking-wider" style="color:'+mc+';opacity:.7">'+ml+'</div></div></div><div class="space-y-2.5 mb-4"><div><div class="flex items-center justify-between text-xs mb-1"><span style="color:var(--text-dim)">Cost to make</span><span class="font-mono font-medium text-green-500">'+formatPrice(p.costPrice)+'</span></div><div class="w-full h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,.04)"><div class="h-full rounded-full markup-bar-cost bar-animate" style="width:'+cw+'%"></div></div></div><div><div class="flex items-center justify-between text-xs mb-1"><span style="color:var(--text-dim)">You pay</span><span class="font-mono font-medium text-red-500">'+formatPrice(p.retailPrice)+'</span></div><div class="w-full h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,.04)"><div class="h-full rounded-full markup-bar-retail bar-animate" style="width:100%"></div></div></div></div><div class="flex items-center justify-between pt-3" style="border-top:1px solid var(--vault-border)"><span class="text-[10px] tracking-wider uppercase" style="color:var(--text-dim)">Made in '+p.madeIn+'</span><div class="flex items-center gap-2"><button onclick="event.stopPropagation();shareProduct(findProduct('+p.id+'))" class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors hover:bg-white/5" style="color:var(--text-dim)" title="Share"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button><i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5" style="color:var(--text-dim)"></i></div></div></div></div>';
+    h+='<div class="product-card-hidden card-hover rounded-2xl cursor-pointer overflow-hidden group" style="background:var(--vault-card);border:1px solid var(--vault-border);transition-delay:'+(i*50)+'ms" onclick="openModal('+p.id+')"><div class="p-5 sm:p-6"><div class="flex items-start justify-between mb-4"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div class="min-w-0"><h3 class="font-semibold text-sm sm:text-base truncate">'+p.name+'</h3><p class="text-xs truncate" style="color:var(--text-dim)">'+p.brand+'</p></div></div><div class="text-right shrink-0 ml-2"><div class="text-xs font-mono font-bold" style="color:'+mc+'">'+mu.toLocaleString()+'%</div><div class="text-[10px] font-medium tracking-wider" style="color:'+mc+';opacity:.7">'+ml+'</div></div></div><div class="space-y-2.5 mb-4"><div><div class="flex items-center justify-between text-xs mb-1"><span style="color:var(--text-dim)">Cost to make</span><span class="font-mono font-medium text-green-500">'+formatPrice(p.costPrice)+'</span></div><div class="w-full h-1.5 rounded-full" style="background:var(--vault-border)"><div class="h-full rounded-full bar-animate markup-bar-cost" style="width:'+cw+'%"></div></div></div><div><div class="flex items-center justify-between text-xs mb-1"><span style="color:var(--text-dim)">Retail price</span><span class="font-mono font-medium text-red-500">'+formatPrice(p.retailPrice)+'</span></div><div class="w-full h-1.5 rounded-full" style="background:var(--vault-border)"><div class="h-full rounded-full bar-animate markup-bar-retail" style="width:100%"></div></div></div></div><div class="flex items-center justify-between"><span class="text-[10px] px-2 py-1 rounded-md" style="background:rgba(255,255,255,.03);color:var(--text-dim)">'+p.madeIn+'</span><div class="flex items-center gap-1.5 text-xs opacity-0 group-hover:opacity-100 transition-opacity" style="color:var(--gold)"><span>Details</span><i data-lucide="arrow-right" class="w-3 h-3"></i></div></div></div></div>';
   }
-  grid.innerHTML=h;lucide.createIcons();
-  requestAnimationFrame(function(){var cards=grid.querySelectorAll('.product-card-hidden');for(var j=0;j<cards.length;j++){(function(card,d){setTimeout(function(){card.classList.remove('product-card-hidden');card.classList.add('product-card-visible')},d)})(cards[j],j*80)}});
+  grid.innerHTML=h;
+  lucide.createIcons();
+  observeCards();
 }
 
-/* Filter & Search */
-function debounceSearch(){clearTimeout(searchTimer);searchTimer=setTimeout(filterProducts,200)}
+/* ===== INTERSECTION OBSERVER ===== */
+var cardObserver=null;
+function observeCards(){
+  if(cardObserver)cardObserver.disconnect();
+  cardObserver=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){entry.target.classList.remove('product-card-hidden');entry.target.classList.add('product-card-visible');cardObserver.unobserve(entry.target)}
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.product-card-hidden').forEach(function(el){cardObserver.observe(el)});
+}
+
+/* ===== FILTER & SEARCH ===== */
+function setCategory(cat){currentCategory=cat;document.getElementById('categorySelect').value=cat;renderCategoryChips();filterProducts()}
+function debounceSearch(){clearTimeout(searchTimer);searchTimer=setTimeout(filterProducts,250)}
+function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('clearSearch').classList.add('hidden');filterProducts()}
 function filterProducts(){
-  var search=document.getElementById('searchInput').value.toLowerCase().trim();
+  var query=document.getElementById('searchInput').value.toLowerCase().trim();
+  var clearBtn=document.getElementById('clearSearch');
+  if(query.length>0)clearBtn.classList.remove('hidden');else clearBtn.classList.add('hidden');
   var sort=document.getElementById('sortSelect').value;
-  document.getElementById('clearSearch').classList.toggle('hidden',!search);
   var filtered=PRODUCTS.filter(function(p){
-    var mc=currentCategory==='all'||p.category===currentCategory;
-    var ms=!search||p.name.toLowerCase().indexOf(search)!==-1||p.brand.toLowerCase().indexOf(search)!==-1||p.category.toLowerCase().indexOf(search)!==-1||p.madeIn.toLowerCase().indexOf(search)!==-1||(p.tags&&p.tags.some(function(t){return t.indexOf(search)!==-1}));
-    return mc&&ms;
+    var catMatch=currentCategory==='all'||p.category===currentCategory;
+    var searchMatch=!query||p.name.toLowerCase().indexOf(query)!==-1||p.brand.toLowerCase().indexOf(query)!==-1||p.category.toLowerCase().indexOf(query)!==-1||(p.tags&&p.tags.some(function(t){return t.indexOf(query)!==-1}));
+    return catMatch&&searchMatch;
   });
-  switch(sort){
-    case'markup-desc':filtered.sort(function(a,b){return getMarkup(b.costPrice,b.retailPrice)-getMarkup(a.costPrice,a.retailPrice)});break;
-    case'markup-asc':filtered.sort(function(a,b){return getMarkup(a.costPrice,a.retailPrice)-getMarkup(b.costPrice,b.retailPrice)});break;
-    case'name-asc':filtered.sort(function(a,b){return a.name.localeCompare(b.name)});break;
-    case'name-desc':filtered.sort(function(a,b){return b.name.localeCompare(a.name)});break;
-    case'price-desc':filtered.sort(function(a,b){return b.retailPrice-a.retailPrice});break;
-    case'price-asc':filtered.sort(function(a,b){return a.retailPrice-b.retailPrice});break;
-  }
+  filtered.sort(function(a,b){
+    var am=getMarkup(a.costPrice,a.retailPrice),bm=getMarkup(b.costPrice,b.retailPrice);
+    switch(sort){
+      case'markup-desc':return bm-am;case'markup-asc':return am-bm;
+      case'name-asc':return a.name.localeCompare(b.name);case'name-desc':return b.name.localeCompare(a.name);
+      case'price-desc':return b.retailPrice-a.retailPrice;case'price-asc':return a.retailPrice-b.retailPrice;
+      default:return 0;
+    }
+  });
   renderProducts(filtered);
 }
-function setCategory(cat){
-  currentCategory=cat;
-  document.getElementById('categorySelect').value=cat;
-  renderCategoryChips();
-  filterProducts();
-}
-function clearSearch(){document.getElementById('searchInput').value='';filterProducts();document.getElementById('searchInput').focus()}
 
-/* Modal */
+/* ===== MODAL ===== */
 function openModal(id){
   var p=findProduct(id);if(!p)return;
-  var mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu),ml=getMarkupLabel(mu),cw=Math.max(3,(p.costPrice/p.retailPrice)*100),ov=p.retailPrice-p.costPrice;
-  document.getElementById('modalContent').innerHTML='<div class="p-6 sm:p-8"><div class="flex items-center justify-between mb-6"><div class="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold" style="background:'+mc+'15;color:'+mc+';border:1px solid '+mc+'30">'+mu.toLocaleString()+'% MARKUP — '+ml+'</div><button onclick="closeModal()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-white/10" style="color:var(--text-dim)"><i data-lucide="x" class="w-5 h-5"></i></button></div><div class="flex items-center gap-4 mb-8"><div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div><h2 class="text-xl sm:text-2xl font-bold">'+p.name+'</h2><p class="text-sm" style="color:var(--text-dim)">'+p.brand+'</p></div></div><div class="rounded-2xl p-5 sm:p-6 mb-6" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><div class="grid grid-cols-2 gap-6 mb-5"><div><div class="text-xs uppercase tracking-wider mb-1" style="color:var(--text-dim)">Cost to Make</div><div class="text-2xl sm:text-3xl font-bold font-mono text-green-500">'+formatPrice(p.costPrice)+'</div></div><div class="text-right"><div class="text-xs uppercase tracking-wider mb-1" style="color:var(--text-dim)">You Pay</div><div class="text-2xl sm:text-3xl font-bold font-mono text-red-500">'+formatPrice(p.retailPrice)+'</div></div></div><div class="relative"><div class="w-full h-4 rounded-full overflow-hidden" style="background:rgba(255,255,255,.04)"><div class="h-full rounded-full markup-bar-cost" style="width:'+cw+'%;float:left"></div><div class="h-full rounded-r-full markup-bar-retail" style="width:'+(100-cw)+'%;float:left"></div></div><div class="flex justify-between mt-2"><span class="text-[10px] font-mono" style="color:var(--text-dim)">'+cw.toFixed(1)+'%</span><span class="text-[10px] font-mono" style="color:var(--text-dim)">100%</span></div></div><div class="mt-4 text-center py-3 rounded-xl" style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.1)"><span class="text-sm" style="color:var(--text-dim)">You overpay by</span><span class="text-lg font-bold font-mono text-red-500 ml-2">'+formatPrice(ov)+'</span></div></div><div class="mb-6"><h3 class="text-sm font-semibold uppercase tracking-wider mb-3" style="color:var(--gold)">Cost Breakdown</h3><div class="rounded-xl p-4" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><p class="text-sm leading-relaxed" style="color:var(--text-secondary)">'+p.materials+'</p></div></div><div class="mb-6"><h3 class="text-sm font-semibold uppercase tracking-wider mb-3" style="color:var(--gold)">The Full Story</h3><p class="text-sm leading-relaxed" style="color:var(--text-secondary)">'+p.story+'</p></div><div class="grid grid-cols-2 gap-3 mb-6"><div class="rounded-xl p-3" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><div class="text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-dim)">Made In</div><div class="text-sm font-medium">'+p.madeIn+'</div></div><div class="rounded-xl p-3" style="background:rgba(255,255,255,.02);border:1px solid var(--vault-border)"><div class="text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-dim)">Category</div><div class="text-sm font-medium capitalize">'+p.category+'</div></div></div><div class="mb-6"><div class="text-[10px] uppercase tracking-wider mb-1" style="color:var(--text-dim)">Sources</div><p class="text-xs" style="color:var(--text-dim)">'+p.source+'</p></div><div class="flex gap-3"><button onclick="shareProduct(findProduct('+p.id+'));closeModal()" class="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:opacity-90" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));color:black"><i data-lucide="share-2" class="w-4 h-4"></i>Share This Robbery</button><button onclick="closeModal()" class="px-5 py-3.5 rounded-xl text-sm font-medium transition-colors hover:bg-white/5" style="border:1px solid var(--vault-border);color:var(--text-secondary)">Close</button></div></div>';
-  document.getElementById('productModal').classList.remove('hidden');document.body.style.overflow='hidden';lucide.createIcons();
+  var mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu),ml=getMarkupLabel(mu),cw=Math.max(3,(p.costPrice/p.retailPrice)*100);
+  var h='<div class="p-6 sm:p-8"><div class="flex items-center justify-between mb-6"><div class="flex items-center gap-4"><div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div><h2 class="text-xl sm:text-2xl font-bold">'+p.name+'</h2><p class="text-sm" style="color:var(--text-dim)">'+p.brand+'</p></div></div><button onclick="closeModal()" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors hover:bg-white/10" style="border:1px solid var(--vault-border)"><i data-lucide="x" class="w-5 h-5" style="color:var(--text-dim)"></i></button></div>';
+  h+='<div class="flex items-center gap-3 mb-6 flex-wrap"><span class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold" style="background:'+mc+'15;color:'+mc+';border:1px solid '+mc+'30">'+mu.toLocaleString()+'% Markup</span><span class="px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider" style="background:'+mc+'10;color:'+mc+';border:1px solid '+mc+'20">'+ml+'</span><span class="px-3 py-1.5 rounded-lg text-xs" style="background:rgba(255,255,255,.03);color:var(--text-dim);border:1px solid var(--vault-border)">'+p.madeIn+'</span></div>';
+  h+='<div class="space-y-3 mb-6"><div><div class="flex items-center justify-between text-sm mb-1.5"><span style="color:var(--text-secondary)">Cost to make</span><span class="font-mono font-bold text-green-500">'+formatPrice(p.costPrice)+'</span></div><div class="w-full h-2.5 rounded-full" style="background:var(--vault-border)"><div class="h-full rounded-full bar-animate markup-bar-cost" style="width:'+cw+'%"></div></div></div><div><div class="flex items-center justify-between text-sm mb-1.5"><span style="color:var(--text-secondary)">Retail price</span><span class="font-mono font-bold text-red-500">'+formatPrice(p.retailPrice)+'</span></div><div class="w-full h-2.5 rounded-full" style="background:var(--vault-border)"><div class="h-full rounded-full bar-animate markup-bar-retail" style="width:100%"></div></div></div></div>';
+  h+='<div class="space-y-5"><div class="rounded-xl p-4" style="background:var(--vault-bg);border:1px solid var(--vault-border)"><h4 class="text-xs font-semibold tracking-wider uppercase mb-2" style="color:var(--text-dim)">Cost Breakdown</h4><p class="text-sm leading-relaxed" style="color:var(--text-secondary)">'+p.materials+'</p></div>';
+  h+='<div class="rounded-xl p-4" style="background:var(--vault-bg);border:1px solid var(--vault-border)"><h4 class="text-xs font-semibold tracking-wider uppercase mb-2" style="color:var(--gold)">The Story</h4><p class="text-sm leading-relaxed" style="color:var(--text-secondary)">'+p.story+'</p></div>';
+  h+='<div class="rounded-xl p-4" style="background:var(--vault-bg);border:1px solid var(--vault-border)"><h4 class="text-xs font-semibold tracking-wider uppercase mb-2" style="color:var(--text-dim)">Source</h4><p class="text-xs leading-relaxed" style="color:var(--text-dim)">'+p.source+'</p></div></div>';
+  h+='<div class="flex gap-3 mt-6"><button onclick="shareProduct(findProduct('+p.id+'))" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all duration-300 hover:opacity-80" style="background:var(--vault-border);color:var(--text-secondary)"><i data-lucide="share-2" class="w-4 h-4"></i>Share</button><button onclick="openRandomProduct()" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all duration-300 hover:opacity-90" style="background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));color:#000"><i data-lucide="shuffle" class="w-4 h-4"></i>Random Product</button></div></div>';
+  document.getElementById('modalContent').innerHTML=h;
+  document.getElementById('productModal').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  lucide.createIcons();
 }
 function closeModal(){document.getElementById('productModal').classList.add('hidden');document.body.style.overflow=''}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
 
-/* Leaderboard */
+/* ===== LEADERBOARD ===== */
 function renderLeaderboard(){
-  var sorted=PRODUCTS.slice().sort(function(a,b){return getMarkup(b.costPrice,b.retailPrice)-getMarkup(a.costPrice,a.retailPrice)}),top=sorted.slice(0,10);
-  var medals=['🥇','🥈','🥉'],mColors=['#D4A843','#A0A0B0','#CD7F32'],h='';
+  var sorted=[...PRODUCTS].sort(function(a,b){return getMarkup(b.costPrice,b.retailPrice)-getMarkup(a.costPrice,a.retailPrice)});
+  var top=sorted.slice(0,10);
+  var h='';
   for(var i=0;i<top.length;i++){
-    var p=top[i],mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu);
-    var rc=i<3?mColors[i]:'var(--text-dim)',rbg=i<3?rc+'15':'transparent',rbd=i<3?rc+'30':'var(--vault-border)',rank=i<3?medals[i]:'#'+(i+1);
-    h+='<div class="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01]" style="background:var(--vault-card);border:1px solid var(--vault-border)" onclick="openModal('+p.id+')"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base font-bold shrink-0" style="background:'+rbg+';border:1px solid '+rbd+';color:'+rc+'">'+rank+'</div><div class="text-xl sm:text-2xl shrink-0">'+p.emoji+'</div><div class="flex-1 min-w-0"><div class="font-semibold text-sm sm:text-base truncate">'+p.name+'</div><div class="text-xs truncate" style="color:var(--text-dim)">'+formatPrice(p.costPrice)+' → '+formatPrice(p.retailPrice)+'</div></div><div class="text-right shrink-0"><div class="text-sm sm:text-base font-mono font-bold" style="color:'+mc+'">'+mu.toLocaleString()+'%</div></div><i data-lucide="chevron-right" class="w-4 h-4 shrink-0 hidden sm:block" style="color:var(--text-dim)"></i></div>';
+    var p=top[i],mu=getMarkup(p.costPrice,p.retailPrice),mc=getMarkupColor(mu),ml=getMarkupLabel(mu);
+    var rank=i+1;
+    var rankStyle='';
+    if(rank===1)rankStyle='background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(212,168,67,.05));border-color:rgba(212,168,67,.3)';
+    else if(rank===2)rankStyle='background:rgba(192,192,192,.08);border-color:rgba(192,192,192,.2)';
+    else if(rank===3)rankStyle='background:rgba(205,127,50,.08);border-color:rgba(205,127,50,.2)';
+    else rankStyle='background:var(--vault-card);border-color:var(--vault-border)';
+    var rankBadge='';
+    if(rank===1)rankBadge='<span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000">1</span>';
+    else if(rank===2)rankBadge='<span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:rgba(192,192,192,.15);color:#C0C0C0">2</span>';
+    else if(rank===3)rankBadge='<span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold" style="background:rgba(205,127,50,.15);color:#CD7F32">3</span>';
+    else rankBadge='<span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-mono" style="background:rgba(255,255,255,.03);color:var(--text-dim)">'+rank+'</span>';
+    h+='<div class="flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01] card-hover" style="'+rankStyle+';border:1px solid '+(rank<=3?'':'var(--vault-border)')+'" onclick="openModal('+p.id+')">'+rankBadge+'<div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0" style="background:rgba(255,255,255,.03);border:1px solid var(--vault-border)">'+p.emoji+'</div><div class="flex-1 min-w-0"><h4 class="font-semibold text-sm truncate">'+p.name+'</h4><p class="text-xs truncate" style="color:var(--text-dim)">'+p.brand+'</p></div><div class="text-right shrink-0"><div class="text-sm font-mono font-bold" style="color:'+mc+'">'+mu.toLocaleString()+'%</div><div class="text-[10px] font-medium tracking-wider" style="color:'+mc+';opacity:.7">'+ml+'</div></div><i data-lucide="chevron-right" class="w-4 h-4 shrink-0" style="color:var(--text-dim)"></i></div>';
   }
-  document.getElementById('leaderboardList').innerHTML=h;lucide.createIcons();
+  document.getElementById('leaderboardList').innerHTML=h;
+  lucide.createIcons();
 }
 
-/* Quiz */
-function generateQuizQuestions(){var s=PRODUCTS.slice().sort(function(){return Math.random()-.5}).slice(0,10);return s.map(function(p){var c=p.costPrice,mu=getMarkup(p.costPrice,p.retailPrice),o=[c];var ms=[.3,.5,2,3,5,8,.1,.7,1.5,4].sort(function(){return Math.random()-.5});for(var i=0;i<ms.length&&o.length<4;i++){var w=Math.round(c*ms[i]);if(w>0&&w!==c&&o.indexOf(w)===-1)o.push(w)}while(o.length<4){var w=Math.round(c*(1+Math.random()*5));if(w>0&&o.indexOf(w)===-1)o.push(w)}o=o.slice(0,4).sort(function(){return Math.random()-.5});return{product:p,correctAnswer:c,options:o,markup:mu}})}
-function startQuiz(){if(PRODUCTS.length<4){showToast('Need at least 4 products for the quiz','error');return}quizState={current:0,score:0,questions:generateQuizQuestions(),answered:false};document.getElementById('quizStart').classList.add('hidden');document.getElementById('quizResult').classList.add('hidden');document.getElementById('quizActive').classList.remove('hidden');renderQuizQuestion()}
-function renderQuizQuestion(){var q=quizState.questions[quizState.current],p=q.product;quizState.answered=false;document.getElementById('quizCurrent').textContent=quizState.current+1;document.getElementById('quizScore').textContent=quizState.score;document.getElementById('quizProgress').style.width=((quizState.current+1)/quizState.questions.length*100)+'%';document.getElementById('quizEmoji').textContent=p.emoji;document.getElementById('quizProductName').textContent=p.name;document.getElementById('quizBrand').textContent=p.brand;document.getElementById('quizRetailPrice').textContent=formatPrice(p.retailPrice);document.getElementById('quizFeedback').classList.add('hidden');document.getElementById('quizNextBtn').classList.add('hidden');var oh='';for(var i=0;i<q.options.length;i++){oh+='<button class="quiz-option rounded-xl p-4 text-center" style="border:1px solid var(--vault-border)" onclick="answerQuiz('+i+','+q.options[i]+','+q.correctAnswer+')" id="quizOpt'+i+'"><span class="text-lg sm:text-xl font-bold font-mono">'+formatPrice(q.options[i])+'</span></button>'}document.getElementById('quizOptions').innerHTML=oh}
-function answerQuiz(index,selected,correct){if(quizState.answered)return;quizState.answered=true;var isCorrect=selected===correct,q=quizState.questions[quizState.current];for(var i=0;i<q.options.length;i++){var el=document.getElementById('quizOpt'+i);el.style.pointerEvents='none';if(q.options[i]===correct)el.classList.add('correct');if(q.options[i]===selected&&!isCorrect)el.classList.add('wrong')}if(isCorrect){quizState.score++;document.getElementById('quizScore').textContent=quizState.score}var fb=document.getElementById('quizFeedback'),ft=document.getElementById('quizFeedbackText'),fc=document.getElementById('quizFactText');fb.classList.remove('hidden');if(isCorrect){fb.style.borderColor='rgba(34,197,94,.3)';fb.style.background='rgba(34,197,94,.05)';ft.style.color='#22C55E';ft.textContent='Correct! You know your stuff.'}else{fb.style.borderColor='rgba(239,68,68,.3)';fb.style.background='rgba(239,68,68,.05)';ft.style.color='#EF4444';ft.textContent='Wrong! Actual cost is '+formatPrice(correct)+' — that is a '+q.markup.toLocaleString()+'% markup.'}fc.textContent=q.product.story.length>150?q.product.story.substring(0,150)+'...':q.product.story;var nb=document.getElementById('quizNextBtn');nb.classList.remove('hidden');nb.textContent=quizState.current<quizState.questions.length-1?'Next Question →':'See Results →'}
-function nextQuizQuestion(){quizState.current++;if(quizState.current>=quizState.questions.length){showQuizResult()}else{renderQuizQuestion()}}
-function showQuizResult(){document.getElementById('quizActive').classList.add('hidden');document.getElementById('quizResult').classList.remove('hidden');var s=quizState.score,t=quizState.questions.length,r=s/t;document.getElementById('quizFinalScore').textContent=s+'/'+t;var ti=document.getElementById('quizResultTitle'),mg=document.getElementById('quizResultMessage'),ic=document.getElementById('quizResultIcon');if(r>=.9){ti.textContent='Unbelievable!';mg.textContent='You see through the BS better than anyone.';ic.style.borderColor='#22C55E';ic.style.background='rgba(34,197,94,.1)'}else if(r>=.7){ti.textContent='Impressive!';mg.textContent='You know more than most about real costs.'}else if(r>=.5){ti.textContent='Eye-Opening?';mg.textContent='Half right — brands hide the truth well.';ic.style.borderColor='#F97316';ic.style.background='rgba(249,115,22,.1)'}else if(r>=.3){ti.textContent='Shocked?';mg.textContent='The markup reality is wild.';ic.style.borderColor='#EF4444';ic.style.background='rgba(239,68,68,.1)'}else{ti.textContent='Mind Blown';mg.textContent='You have been overpaying more than you thought.';ic.style.borderColor='#EF4444';ic.style.background='rgba(239,68,68,.1)'}lucide.createIcons()}
+/* ===== QUIZ: GENERATE RANDOM QUESTIONS ===== */
+function generateQuizQuestions(){
+  /* Only use products with valid cost > 0 */
+  var eligible=PRODUCTS.filter(function(p){return p.costPrice>0&&p.retailPrice>p.costPrice});
+  var shuffled=eligible.sort(function(){return 0.5-Math.random()});
+  var selected=shuffled.slice(0,Math.min(10,shuffled.length));
+  var questions=selected.map(function(product){
+    var options=[product.costPrice];
+    var wrong1=Math.max(1,Math.round(product.costPrice*(0.08+Math.random()*0.25)));
+    var wrong2=Math.round(product.costPrice+(product.retailPrice-product.costPrice)*(0.25+Math.random()*0.45));
+    var wrong3=Math.round(product.retailPrice*(0.65+Math.random()*0.3));
+    if(wrong1!==product.costPrice)options.push(wrong1);
+    if(wrong2!==product.costPrice&&wrong2!==wrong1)options.push(wrong2);
+    if(wrong3!==product.costPrice&&wrong3!==wrong1&&wrong3!==wrong2)options.push(wrong3);
+    while(options.length<4){var rng=Math.round(Math.random()*product.retailPrice);if(rng>0&&options.indexOf(rng)===-1)options.push(rng)}
+    options.sort(function(){return 0.5-Math.random()});
+    return{product:product,options:options,correctAnswer:product.costPrice,markup:getMarkup(product.costPrice,product.retailPrice)};
+  });
+  return questions;
+}
 
-/* Counter Animation */
-function animateCounter(el,target,suffix,duration){suffix=suffix||'';duration=duration||2000;var st=performance.now();function upd(now){var pr=Math.min((now-st)/duration,1),e=1-Math.pow(1-pr,4),cur=Math.round(target*e);el.textContent=(target>=1000?cur.toLocaleString():cur)+suffix;if(pr<1)requestAnimationFrame(upd)}requestAnimationFrame(upd)}
+/* ===== QUIZ: START ===== */
+function startQuiz(){
+  var eligible=PRODUCTS.filter(function(p){return p.costPrice>0&&p.retailPrice>p.costPrice});
+  if(eligible.length<4){showToast('Need at least 4 products with valid pricing for the quiz','error');return}
+  quizState.current=0;quizState.score=0;quizState.questions=generateQuizQuestions();quizState.answered=false;quizState.grade=0;
+  document.getElementById('quizStart').classList.add('hidden');
+  document.getElementById('quizResult').classList.add('hidden');
+  document.getElementById('quizActive').classList.remove('hidden');
+  renderQuizQuestion();
+}
 
-/* Nav Helpers */
-function closeMobile(){document.getElementById('mobileMenu').classList.add('hidden')}
+/* ===== QUIZ: RENDER QUESTION ===== */
+function renderQuizQuestion(){
+  var q=quizState.questions[quizState.current],product=q.product;
+  document.getElementById('quizCurrent').textContent=quizState.current+1;
+  document.getElementById('quizScore').textContent=quizState.score;
+  document.getElementById('quizProgress').style.width=((quizState.current+1)/quizState.questions.length*100)+'%';
+  document.getElementById('quizEmoji').textContent=product.emoji;
+  document.getElementById('quizProductName').textContent=product.name;
+  document.getElementById('quizBrand').textContent=product.brand;
+  document.getElementById('quizRetailPrice').textContent=formatPrice(product.retailPrice);
+  var labels=['A','B','C','D'];
+  var h='';
+  for(var i=0;i<q.options.length;i++){
+    h+='<button id="qopt_'+i+'" class="quiz-option p-4 rounded-xl text-center" style="background:var(--vault-bg);border:1px solid var(--vault-border)" onclick="selectQuizAnswer('+i+')"><div class="option-label">Option '+labels[i]+'</div><div class="text-sm sm:text-base font-semibold font-mono">'+formatPrice(q.options[i])+'</div></button>';
+  }
+  document.getElementById('quizOptions').innerHTML=h;
+  document.getElementById('quizFeedback').classList.add('hidden');
+  document.getElementById('quizNextBtn').classList.add('hidden');
+  quizState.answered=false;
+}
 
-/* Active Nav Highlighting on Scroll */
-function updateActiveNav(){
+/* ===== QUIZ: SELECT ANSWER ===== */
+function selectQuizAnswer(idx){
+  if(quizState.answered)return;
+  quizState.answered=true;
+  var q=quizState.questions[quizState.current],selectedPrice=q.options[idx],isCorrect=selectedPrice===q.correctAnswer;
+  for(var i=0;i<q.options.length;i++){
+    var el=document.getElementById('qopt_'+i);
+    if(q.options[i]===q.correctAnswer)el.classList.add('correct');
+    else if(i===idx&&!isCorrect)el.classList.add('wrong');
+  }
+  if(isCorrect){quizState.score++;document.getElementById('quizScore').textContent=quizState.score}
+  var fb=document.getElementById('quizFeedback'),ft=document.getElementById('quizFeedbackText'),ff=document.getElementById('quizFactText');
+  fb.classList.remove('hidden');
+  if(isCorrect){
+    fb.style.background='rgba(34,197,94,.08)';fb.style.borderColor='rgba(34,197,94,.2)';ft.style.color='#22C55E';
+    ft.textContent='✓ Correct! The actual cost is '+formatPrice(q.correctAnswer)+' — a '+q.markup.toLocaleString()+'% markup.';
+  }else{
+    fb.style.background='rgba(239,68,68,.08)';fb.style.borderColor='rgba(239,68,68,.2)';ft.style.color='#EF4444';
+    ft.textContent='✗ Wrong. The actual cost is '+formatPrice(q.correctAnswer)+', not '+formatPrice(selectedPrice)+'.';
+  }
+  ff.textContent=q.product.story;
+  var nb=document.getElementById('quizNextBtn');nb.classList.remove('hidden');
+  nb.textContent=quizState.current===quizState.questions.length-1?'See Results':'Next Question →';
+}
+
+/* ===== QUIZ: NEXT ===== */
+function nextQuizQuestion(){quizState.current++;if(quizState.current>=quizState.questions.length)showQuizResults();else renderQuizQuestion()}
+
+/* ===== QUIZ: RESULTS WITH GRADE ===== */
+function showQuizResults(){
+  document.getElementById('quizActive').classList.add('hidden');
+  document.getElementById('quizResult').classList.remove('hidden');
+  var score=quizState.score,total=quizState.questions.length,percentage=Math.round((score/total)*100);
+  var grade=1;if(percentage>=90)grade=5;else if(percentage>=70)grade=4;else if(percentage>=50)grade=3;else if(percentage>=30)grade=2;
+  quizState.grade=grade;
+  document.getElementById('quizFinalScore').textContent=score+' / '+total;
+  document.getElementById('quizFinalPercent').textContent=percentage+'% correct';
+  document.getElementById('quizGradeNumber').textContent=grade;
+  var badge=document.getElementById('quizGradeBadge'),label=document.getElementById('quizGradeLabel'),title=document.getElementById('quizResultTitle'),msg=document.getElementById('quizResultMessage'),stars=document.getElementById('quizGradeStars');
+  var gradeData=[
+    {label:"BEGINNER",color:"#EF4444",title:"Level 1 — Marketer's Dream",message:"Brands absolutely love customers like you. You're significantly overpaying for almost everything. The good news? Now you know — and knowledge is power. Spend some time in the vault and you'll see the patterns fast.",stars:1},
+    {label:"NOVICE",color:"#F97316",title:"Level 2 — Pricing Novice",message:"You have a vague sense that things are overpriced, but the specifics still surprise you. You're likely overpaying on at least half of your purchases. Explore the vault more to sharpen your instincts.",stars:2},
+    {label:"LEARNING",color:"#3B82F6",title:"Level 3 — Getting There",message:"Solid awareness of product markups, but some categories still trick you. You're making better decisions than most consumers already. A few more rounds in the vault and you'll be a pro.",stars:3},
+    {label:"SHARP",color:"#D4A843",title:"Level 4 — Smart Shopper",message:"Impressive. You see through most marketing illusions and have a strong sense of what things really cost. You probably negotiate, compare prices, and rarely buy at full retail. Brands hate customers like you.",stars:4},
+    {label:"EXPERT",color:"#22C55E",title:"Level 5 — Pricing Expert",message:"You have an exceptional understanding of product pricing. You could literally work as a pricing consultant. You see through every marketing trick in the book and almost nothing gets past you. Respect.",stars:5}
+  ];
+  var gd=gradeData[grade-1];
+  badge.style.borderColor=gd.color;label.style.color=gd.color;label.textContent=gd.label;
+  document.getElementById('quizGradeNumber').style.color=gd.color;
+  title.textContent=gd.title;msg.textContent=gd.message;
+  var sh='';for(var i=0;i<5;i++){sh+='<span class="grade-star text-xl '+(i<gd.stars?'filled':'empty')+'">★</span>'}
+  stars.innerHTML=sh;
+  lucide.createIcons();
+}
+
+/* ===== HERO STATS ===== */
+function animateStats(){
+  var total=PRODUCTS.length;
+  var markups=PRODUCTS.filter(function(p){return p.costPrice>0}).map(function(p){return getMarkup(p.costPrice,p.retailPrice)});
+  var avgMarkup=markups.length>0?Math.round(markups.reduce(function(a,b){return a+b},0)/markups.length):0;
+  var totalSaved=PRODUCTS.reduce(function(a,p){return a+(p.retailPrice-p.costPrice)},0);
+  animateNumber('statProducts',0,total,1500,'');
+  animateNumber('statMarkup',0,avgMarkup,1800,'%');
+  animateNumber('statSaved',0,totalSaved,2000,'₹');
+}
+function animateNumber(id,start,end,duration,suffix){
+  var el=document.getElementById(id);if(!el)return;
+  var startTime=null;
+  function step(timestamp){
+    if(!startTime)startTime=timestamp;
+    var progress=Math.min((timestamp-startTime)/duration,1);
+    var eased=1-Math.pow(1-progress,3);
+    var current=Math.round(start+(end-start)*eased);
+    if(end>=100000)el.textContent='₹'+(current/100000).toFixed(1).replace(/\.0$/,'')+'L';
+    else if(end>=1000)el.textContent=(suffix==='%'?'':suffix)+current.toLocaleString('en-IN')+(suffix==='%'?'%':'');
+    else el.textContent=(suffix==='%'?'':suffix)+current+(suffix==='%'?'%':'');
+    if(progress<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ===== NAVBAR SCROLL ===== */
+window.addEventListener('scroll',function(){
+  var st=window.pageYOffset;
+  var nav=document.getElementById('navbar');
+  if(st>100)nav.style.borderBottomColor='var(--vault-border)';else nav.style.borderBottomColor='transparent';
+  if(st>500)document.getElementById('backToTop').classList.add('visible');else document.getElementById('backToTop').classList.remove('visible');
   var sections=['vault','leaderboard','quiz','about'];
-  var scrollPos=window.scrollY+200;
-  var links=document.querySelectorAll('.nav-link');
   for(var i=sections.length-1;i>=0;i--){
     var sec=document.getElementById(sections[i]);
-    if(sec&&sec.offsetTop<=scrollPos){
-      links.forEach(function(l){l.classList.remove('active')});
-      var activeLink=document.querySelector('.nav-link[href="#'+sections[i]+'"]');
-      if(activeLink)activeLink.classList.add('active');
+    if(sec&&st>=sec.offsetTop-200){
+      document.querySelectorAll('.nav-link').forEach(function(l){l.classList.remove('active')});
+      var link=document.querySelector('.nav-link[href="#'+sections[i]+'"]');
+      if(link)link.classList.add('active');
       break;
     }
   }
-}
-
-/* Back to Top Visibility */
-function updateBackToTop(){document.getElementById('backToTop').classList.toggle('visible',window.scrollY>600)}
-
-/* Scroll Event (combined for performance) */
-var scrollTick=false;
-window.addEventListener('scroll',function(){
-  if(!scrollTick){scrollTick=true;requestAnimationFrame(function(){
-    document.getElementById('navbar').style.borderBottomColor=window.scrollY>100?'var(--vault-border)':'transparent';
-    updateActiveNav();
-    updateBackToTop();
-    scrollTick=false;
-  })}
 });
 
-document.getElementById('mobileMenuBtn').addEventListener('click',function(){document.getElementById('mobileMenu').classList.toggle('hidden')});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
-
-/* INIT */
-window.addEventListener('load',function(){
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded',function(){
+  /* Step 1: Parse user notepad data FIRST */
   parseUserData();
+
+  /* Step 2: Initialize everything */
+  lucide.createIcons();
   renderCategoryChips();
   filterProducts();
   renderLeaderboard();
-  setTimeout(function(){
-    var total=PRODUCTS.length;
-    var avg=total>0?Math.round(PRODUCTS.reduce(function(a,p){return a+getMarkup(p.costPrice,p.retailPrice)},0)/total):0;
-    var saved=PRODUCTS.reduce(function(a,p){return a+(p.retailPrice-p.costPrice)},0);
-    animateCounter(document.getElementById('statProducts'),total,'+');
-    animateCounter(document.getElementById('statMarkup'),avg,'%');
-    animateCounter(document.getElementById('statSaved'),Math.round(saved/1000),'K+');
-  },800);
-  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.classList.add('animate-fade-up')}})},{threshold:.1});
-  var targets=document.querySelectorAll('#leaderboard > div > div, #about .grid > div');
-  for(var i=0;i<targets.length;i++){targets[i].style.opacity='0';obs.observe(targets[i])}
-  lucide.createIcons();
+  setTimeout(animateStats,800);
 });
 </script>
-
-<!-- ================================================================
-     PASTE YOUR NOTEPAD DATA BELOW THIS LINE
-     ================================================================
-     FORMAT: Product Name|Brand|Emoji|Category|CostPrice|RetailPrice|Currency|Made In|Materials|Story|Source|Tags
-
-     CATEGORIES: fashion, electronics, cosmetics, food, health, services, education
-     CURRENCY: ₹ or $ or €
-     TAGS: comma separated, lowercase
-     NOTE: Do NOT use | inside any field.
-
-     EXAMPLES (delete these before adding real data):
-
-     iPhone 16 Pro Max|Apple|📱|electronics|45000|159900|₹|China/India|A17 Pro chip: ₹12000, Display: ₹8000, Camera: ₹6000, Battery: ₹1500, Other: ₹17500|Apple BOM estimate based on iFixit teardown analysis|iFixit, TechInsights|iphone,apple,smartphone
-     Levi's 501 Jeans|Levi's|👖|fashion|600|5499|₹|Vietnam|Denim: ₹250, Buttons: ₹80, Labor: ₹150, Finishing: ₹80, Packaging: ₹40|Same quality from unbranded maker costs a fraction|Alibaba wholesale|jeans,fashion,denim,levis
-     Red Bull 250ml|Red Bull|🥫|food|8|125|₹|India|Water: ₹0.5, Caffeine: ₹2, Sugar: ₹1, Can: ₹3, Carbonation: ₹0.5|Most money goes to extreme sports marketing|Beverage industry|redbull,beverage,energy
-
-     ================================================================ -->
-<div id="user-data" style="display:none;">
-
-</div>
 </body>
 </html>
